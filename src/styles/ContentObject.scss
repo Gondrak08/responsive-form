@@ -1,0 +1,15 @@
+.object-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 30em;
+}
+.object-container .container{
+    max-width: 800px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: lightgray;
+    padding: 1.5em 1em;
+}

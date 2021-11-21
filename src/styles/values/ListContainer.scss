@@ -1,0 +1,22 @@
+.list-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    // gap: 15px;
+    button{
+        height: 1.5em;
+        width: 1.5em;
+        text-align: center;
+    }
+    .list-values{
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 90%;
+        div{
+           width: 100%
+        }
+        // order: 1;
+    }
+}
+
