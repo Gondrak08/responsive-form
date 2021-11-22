@@ -29,19 +29,27 @@ export const FormProvider = ({ children }) => {
             }
         })
         
-       console.log(valueType);
+       console.log(formData);
     }
 
     const [content, setContent] = useState({
         "name": "João Marciano Neto",
         "address": 'Rua Fernando Neto',
         "active": true,
-        "list": ['azul marinho', 'carro verde'],
-        "someOption": "C",
-        "status": false,
-        "label": ["casa verde", 'rua azul'],
+        "list": ['Livros', 'Bolos'],
+        "someOption": "B",
+        "objectList": [
+            {
+                "status": true,
+                "label": ["casa verde", 'rua azul']
+            }
+          
+        ]
+            
         
-        
+            
+            
+       
     })
 
 

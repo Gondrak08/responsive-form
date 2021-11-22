@@ -5,22 +5,23 @@ import ContentObject from '../ContentObject';
 import './../../styles/values/ListContainer.scss'
 
 
-function ListContainer({ value, valueType, property, content }) {
+function ListContainer({ value, valueType, property, content, type }) {
     const context = useContext(FormContext);
-    
     const [data, setData] = useState(value);
+    const [cType, setCType] = useState()
 
-    // console.log(property)
+   
     
-    // console.log(value.properties)
-    // if (context.content[property]) Object.values(context.content[property]).map(key => console.log(key))
 
     function addField() {
         const newField = context.content[property];
         newField.push('');
         context.setContent({ ...context.content, [property]: newField });
+        
     }
     
+    // if(context.content[property] instanceof Array) Object.values(context.content[property]).map((item)=> console.log(item))
+   
     return (
         <div className="list-row" >
             <p>{
@@ -31,24 +32,29 @@ function ListContainer({ value, valueType, property, content }) {
             
             <div className="list-values" >
                 {Object.keys(data).map((item, k) => (
-                    // console.log(context.content[item]),
+                   
                     data[item].type == 'string' ?
-                        <>
+                    <>
                             {
-                                context.content[property] ? Object.values(context.content[property]).map(key =>
+                                context.content[property] instanceof Array ? Object.values(context.content[property]).map(key =>
                                 (
                                     <PlainText value={data[item]} key={key} valueType={data[item].type} content={key} />
                                     )
-                                ) : null
+                                )
+                                : (
+                                    <PlainText value={data[item]} key={k} valueType={data[item].type} content={context.content[property]} />
+                                    )
                             }
                             
                         </>
                         : data[item].type == 'object' ?
-                            <>
-                                
-                                <ContentObject properties={data[item].properties} key={k} valueType={data[item].type} content={context.content[item]} property={item} />
-                            </>
-                            : null
+                            context.content[property] instanceof Array ?
+                                Object.values(context.content[property]).map((val) => (
+                                    val instanceof Object ? Object.values(val).map(y =>
+                                        <ContentObject properties={data[item]} key={y} valueType={data[item].type} content={y} property={item} />
+                                        ) : null
+                                ))
+                            : null : null
                 ))}
             </div>
             

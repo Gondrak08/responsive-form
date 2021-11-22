@@ -16,10 +16,7 @@ function PlainText({ value, valueType, content, property }) {
                 <div className="plain-text" >
                     <p>{value.title ? value.title : value.type}</p>
                         
-                        
-                        
-
-                        <input value={content} type={value.type} placeholder={value.title} onChange={(e) => context.HandleChange(e, valueType)} />
+                        <input defaultValue={content} type={value.type} placeholder={value.title} onChange={(e) => context.HandleChange(e, valueType)} />
 
                         {/* {context.content[property] ? Object.values(context.content[property]).map(key =>
                         (
