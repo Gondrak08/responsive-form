@@ -15,23 +15,42 @@ function ContentItem() {
     // console.log(schema);
     const { type, properties } = schema ?? {};
 
-    // Object.keys(properties).map(key => {
-    //     console.log(properties[key])
-    // })
-    // console.log(context.content[properties])
-
-    return (
-        <section>
+    const [content, setContent] = useState({
+        "name": "João Marciano Neto",
+        "address": 'Rua Fernando Neto',
+        "active": true,
+        "list": ['Livros', 'Bolos'],
+        "someOption": "B",
+        "identifier": 32,
+        "objectList": [
             {
-               properties ? Object.keys(properties).map((key) => (
-                   properties[key].type === 'object' ? <ContentObject properties={properties} property={key} key={key} />      :null
-                    
-                    )) : null
-
+                "status": false,
+                "label": 'casa verde',
             }
 
+        ]
 
-            {/* {type === 'object' ? <ContentObject properties={properties} /> : 'não é objeto'} */}
+
+
+
+
+    })
+
+    if (properties) {
+        
+        Object.keys(properties).map(value=>{console.log(content[value])})
+    }
+    return (
+        <section className="content-display" >
+            {/* {
+               properties ? Object.keys(properties).map((key) => (
+                   properties[key].type === 'object' ? <ContentObject properties={properties} property={key} key={key} /> : null
+                    )) : null
+
+            } */}
+
+            {type === 'object' ? (<div className="form" > <ContentObject content={content} properties={properties}  /> </div>) : 'não é objeto'}
+           
         </section>
     )
 }

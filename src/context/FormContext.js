@@ -10,27 +10,27 @@ export const FormProvider = ({ children }) => {
     const { type, properties } = schema ?? {};
     const [formData, setFormData] = useState(null)
     
-    async function HandleChange(e, valueType) {
-        Object.values(properties).forEach((val, k) => {
-            if (valueType == val.type) {
-                let value;
-                switch (valueType) {
-                    case 'boolean':
-                        value = e.target.checked;
-                        break;
-                    case 'string':
-                        value = e.target.value;
-                        break;
-                    default:
-                        value = e.target.value;
-                        break;
-                }
-                setFormData({...val, value},)
-            }
-        })
+    // async function HandleChange(e, valueType) {
+    //     Object.values(properties).forEach((val, k) => {
+    //         if (valueType == val.type) {
+    //             let value;
+    //             switch (valueType) {
+    //                 case 'boolean':
+    //                     value = e.target.checked;
+    //                     break;
+    //                 case 'string':
+    //                     value = e.target.value;
+    //                     break;
+    //                 default:
+    //                     value = e.target.value;
+    //                     break;
+    //             }
+    //             setContent({...content, value},)
+    //         }
+    //     })
         
-       console.log(formData);
-    }
+    //    console.log(content);
+    // }
 
     const [content, setContent] = useState({
         "name": "João Marciano Neto",
@@ -38,10 +38,11 @@ export const FormProvider = ({ children }) => {
         "active": true,
         "list": ['Livros', 'Bolos'],
         "someOption": "B",
+        "identifier": 32,
         "objectList": [
             {
-                "status": true,
-                "label": ["casa verde", 'rua azul']
+                "status": false,
+                "label": 'casa verde',
             }
           
         ]
@@ -52,13 +53,9 @@ export const FormProvider = ({ children }) => {
        
     })
 
-
-
-
-
     
     return (
-        <FormContext.Provider value={{content, setContent, HandleChange}} >
+        <FormContext.Provider value={{content, setContent,}} >
             {children}
         </FormContext.Provider>
     )
