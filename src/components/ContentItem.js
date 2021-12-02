@@ -26,8 +26,11 @@ function ContentItem() {
             {
                 "status": false,
                 "label": 'casa verde',
+            },
+             {
+                "status": false,
+                "label": 'casa vermelho',
             }
-
         ]
 
 
@@ -36,10 +39,10 @@ function ContentItem() {
 
     })
 
-    if (properties) {
+    // if (properties) {
         
-        Object.keys(properties).map(value=>{console.log(content[value])})
-    }
+    //     Object.keys(properties).map(value=>{console.log(content[value])})
+    // }
     return (
         <section className="content-display" >
             {/* {
@@ -49,7 +52,7 @@ function ContentItem() {
 
             } */}
 
-            {type === 'object' ? (<div className="form" > <ContentObject content={content} properties={properties}  /> </div>) : 'não é objeto'}
+            {type === 'object' ? (<div className="form" > <ContentObject content={context.content} setContent={context.setContent} properties={properties}  /> </div>) : 'não é objeto'}
            
         </section>
     )

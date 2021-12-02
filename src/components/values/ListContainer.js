@@ -5,56 +5,79 @@ import ContentObject from '../ContentObject';
 import './../../styles/values/ListContainer.scss'
 import CheckBox from './CheckBox';
 
-function ListContainer({ value, valueType, property, content, type, handleChange }) {
+function ListContainer({ schema, valueType, property, content, setContent, type, handleChange, addField }) {
     const context = useContext(FormContext);
 
+    
+    // console.log(content, property)
+    // function addField() {
+    //     // const newField = [...content]
+    //     // // newField.push(schema)
+    //     // newField.push('');
+    //     // context.setContent({ ...context.content, [property]: newField });   
+    //     // console.log(cont)
+    // }
 
-    function addField() {
-        const newField = context.content[property];
-        newField.push('');
-        context.setContent({ ...context.content, [property]: newField });
-    }
     function removeField(k) {
-        const field = context.content[property];
+        const field = [...content];
         field.splice(k, 1);
-        context.setContent({ ...context.content, [property]: field })
+        setContent({ ...context.content, [property]: field })
         console.log('hello')
     };
+    // console.log(content[property])
     
-    // console.log(content)
-    
+
+
     return (
         <div className="list-row" >
             <p>{
-                value.type
+                schema.type
             }</p>
 
-            <button className="add-button" onClick={addField}>+</button>
+            <button className="add-button" onClick={()=> addField(content)}>+</button>
             
             <div className="list-values" >
-
-
+                
                 {
-                    Object.keys(value).map((item, key) => {
-                        switch (value[item].type) {
+                    Object.keys(schema).map((item, key) => {
+                        // console.log({
+                        //     content: content,
+                        //     item: item,
+                        //     valueItem: value[item],
+                        //     value: value,
+                        // })
+
+                        switch (schema[item].type) {
+                            
                             case 'string':
                                  return <PlainText
                                     key={key}
-                                    value={value[item]}
-                                    valueType={value[item].type}
-                                    content={null}
+                                     schema={schema[item]}
+                                     valueType={schema[item].type}
+                                    content={content}
                                     property={item}
                                  />
-                            
+                          
+
                             case 'object':
-                              
-                                return <ContentObject
-                                    properties={value[item].properties}
-                                    key={key}
-                                    valueType={value[item].type}
+                                return content instanceof Array ? content.map(cont => (
                                     
-                                    
-                                />
+                                    <ContentObject
+                                        properties={schema[item].properties}
+                                        key={key}
+                                        valueType={schema[item].type}
+                                        content={cont ?? null}
+                                    />
+
+                                )) : 
+                                    (
+                                        <ContentObject
+                                        properties={schema[item].properties}
+                                        key={key}
+                                        valueType={schema[item].type}
+                                        content={content ? content : null}
+                                        />
+                                    )
                             default:
                               
                         }
@@ -87,10 +110,10 @@ export default ListContainer
         //                                 handleChange={handleChange}
         //                                 removeField={removeField}
         //                             />
-        //                             <button className="delete-button"
-        //                                 onClick={() => removeField()}>
-        //                                 -
-        //                             </button>
+                                    // <button className="delete-button"
+                                    //     onClick={() => removeField()}>
+                                    //     -
+                                    // </button>
 
         //                         </div>
         //                     ) : typeof val == 'object' ? Object.values(val).map((i) =>

@@ -43,6 +43,10 @@ export const FormProvider = ({ children }) => {
             {
                 "status": false,
                 "label": 'casa verde',
+            },
+            {
+                "status": true,
+                "label": 'casa vermelha',
             }
           
         ]

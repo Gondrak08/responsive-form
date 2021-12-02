@@ -4,7 +4,7 @@ import './../../styles/values/PlainText.scss'
 
 
 
-function PlainText({ value, valueType, k , content, property, handleChange }) {
+function PlainText({ schema, valueType, k , content, property, handleChange }) {
     const context = useContext(FormContext)
     // console.log(property)
     return (
@@ -12,14 +12,14 @@ function PlainText({ value, valueType, k , content, property, handleChange }) {
             {
                 typeof content == 'string' ?
                     <div className="plain-text" >
-                        {value.title ? (<p>{value.title} </p>) : value.type ? (<p>{value.type}</p>) : null}
-                        <input id={k} defaultValue={content} type={value.type} placeholder={value.title} onChange={(e) => handleChange(e, property, k, valueType)}  />
+                        {schema.title ? (<p>{schema.title} </p>) : schema.type ? (<p>{schema.type}</p>) : null}
+                        <input id={k} defaultValue={content} type={schema.type} placeholder={schema.title} onChange={(e) => handleChange(e, property, k, valueType)}  />
 
                      </div>
-                    : content instanceof Object ? Object.values(content).map(val => (
+                    : content instanceof Object ? Object.values(content).map(item => (
                         // console.log(val),
                         <div className="plain-text" >
-                            <input defaultValue={val} type={value.type} placeholder={value.title} onChange={(e) => handleChange(e, property, k, valueType)} />
+                            <input defaultValue={item} type={schema.type} placeholder={schema.title} onChange={(e) => handleChange(e, property, k, valueType)} />
                         </div>
                     )) : null
             }
