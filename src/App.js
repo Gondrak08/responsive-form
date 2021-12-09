@@ -1,11 +1,11 @@
 import { FormProvider } from './context/FormContext';
-import ContentItem from './components/ContentItem';
+import ContentForm from './components/ContentForm';
 
 function App() {
   return (
     <div >
       <FormProvider>
-        <ContentItem/>
+        <ContentForm/>
       </FormProvider>
     </div>
   );

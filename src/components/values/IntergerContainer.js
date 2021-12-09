@@ -3,7 +3,7 @@ import FormContext from '../../context/FormContext'
 
 function IntergerContainer({ schema, valueType, k, content, property, handleChange }) {
     const context = useContext(FormContext)
-    // console.log(value)
+    // console.log(content)
     return (
         <div style={{ width: '3em' }}>
             {schema ? <p>{schema.type} </p> : 'null'}

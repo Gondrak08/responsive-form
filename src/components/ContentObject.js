@@ -5,44 +5,70 @@ import FormContext from '../context/FormContext';
 import PlainText from './values/PlainText';
 import Checkbox from './values/CheckBox';
 import OptionsBox from './values/OptionsBox';
-import ListContainer from './values/ListContainer';
+import ArrayContainer from './values/ArrayContainer';
 import IntergerContainer from './values/IntergerContainer';
 
-function ContentObject({ properties, property, content, setContent, schema, valueType }) {
+function ContentObject({ properties, property, content, setContent, schema, valueType, }){
+
     const context = useContext(FormContext)
-      
-    function handleChange(event, property, k) {
-        var a = content[property];
+    
+    function handleChange(event, propert, k) {
+        var a = context.content[propert];
         // a[property] =  event.target.value ;
         //     a = event.target.value ;
         // context.setContent({ ...context.content, [property]: a })
-        console.log(event.target.name)
+        console.log(a[k], propert)
     };
 
 
+    function addField(cont, prop, maxItems) {
+        const newField = cont
+        let obj = { ...context.content };
+        newField.push(null);
 
-    function addField(cont) {
-        if (content) {
-            Object.entries(content).map((value, index) => {
-                console.log(value)
-            })
+        if (obj[property]) {
+            obj[property][prop] = newField;
+            context.setContent(obj);
+        } else {
+            obj[prop] = newField;
+            context.setContent(obj);
         }
+        // if (typeof newField[0] === 'string') {
+        //     obj[prop] = newField;
+        //     if (newField.length < maxItems) {
+        //         newField.push(null);
+        //         context.setContent( obj );
+        //     }
+        // }
+        // if (typeof newField[0] === 'object') {
+        //     obj[property][prop] = newField;
+        //     newField.push({ status: false, label: 'nada' });
+        //     context.setContent(obj);
+        //     // console.log(typeof newField[0]);
+        // }
         
-        
-        // const newField = [...content]
-        // console.log(property)
-        // newField.push(schema)
-        // newField.push('');
-        // context.setContent({ ...context.content, [property]: newField });
-        // console.log(newField)
+        // console.log(context.content)
+        // console.log({
+        //     content: property[prop],
+        //     cont: cont,
+        //     property: property,
+        //     prop:prop,
+        // })
     }
 
-    if (content) {
-        Object.entries(content).map((value, index) => {
-            console.log(value)
-        })
+    function removeField(cont, prop, k) {
+        const field = cont;
+        let obj = { ...context.content };
+        field.splice(k, 1);
+        if (obj[property]) {
+            obj[property][prop] = field;
+            context.setContent(obj)
+        } else {
+            obj[prop] = field;
+            context.setContent(obj)
+        }
     }
-   
+
 
     return (
         <div className="object-container"  >
@@ -54,6 +80,7 @@ function ContentObject({ properties, property, content, setContent, schema, valu
                         //     value: value,
                         //     item:content[value]
                         // })
+
                         switch (properties[value].type) {
                             
                             case 'string':
@@ -94,7 +121,7 @@ function ContentObject({ properties, property, content, setContent, schema, valu
 
                         case 'array':
                         // console.log(content ? content[value] : null, value)
-                        return <ListContainer
+                        return <ArrayContainer
                             key={key}
                             k={key}
                             schema={properties[value]}
@@ -105,6 +132,7 @@ function ContentObject({ properties, property, content, setContent, schema, valu
                             type={valueType}
                             handleChange={handleChange}
                             addField={addField}
+                            removeField={removeField}
                         />
                         
                         case 'integer':
@@ -118,14 +146,13 @@ function ContentObject({ properties, property, content, setContent, schema, valu
                                 handleChange={handleChange}
                             />
                             case 'object':
-                                // console.log(content ? content[value] : null)
-
                                return <ContentObject
                                 key={key}
                                 k={key}
+                                schema={properties[value]}
                                 properties={properties[value].properties}
                                 valueType={properties[value].type}
-                                content={content}
+                                content={content[value]}
                                 property={value}
                                 handleChange={handleChange}
                                 />

@@ -33,28 +33,47 @@ export const FormProvider = ({ children }) => {
     // }
 
     const [content, setContent] = useState({
-        "name": "João Marciano Neto",
-        "address": 'Rua Fernando Neto',
-        "active": true,
-        "list": ['Livros', 'Bolos'],
-        "someOption": "B",
-        "identifier": 32,
-        "objectList": [
-            {
-                "status": false,
-                "label": 'casa verde',
-            },
-            {
-                "status": true,
-                "label": 'casa vermelha',
-            }
+        // "name": "João Marciano Neto",
+        // "address": 'Rua Fernando Neto',
+        // "active": true,
+        // "list": ['Livros', 'Bolos'],
+        // "someOption": "B",
+        // "identifier": 32,
+        // "objectList": [
+        //     {
+        //         "status": false,
+        //         "label": 'casa verde',
+        //     },
+        //     {
+        //         "status": true,
+        //         "label": 'casa vermelha',
+        //     }
           
-        ]
+        // ]
             
-        
+        "list": [
+            "azul",
+            "vermelho"
+        ],
+        "more": {
+            "objectList": [
+                {
+                    "status": false,
+                    "label": "vida noturna"
+                },
+                {
+                    "status": true,
+                    "label": "gosta de bar"
+                }
+            ],
+            "someOption": "B",
+            "identifier": 20
+        },
+        "name": "Carlos Moreira",
+        "address": "admin@admin.com",
+        "active": true
             
             
-       
     })
 
     

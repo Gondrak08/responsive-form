@@ -5,70 +5,69 @@ import ContentObject from '../ContentObject';
 import './../../styles/values/ListContainer.scss'
 import CheckBox from './CheckBox';
 
-function ListContainer({ schema, valueType, property, content, setContent, type, handleChange, addField }) {
-    const context = useContext(FormContext);
-
+function ArrayContainer({ schema, valueType, property, content, setContent, type, handleChange, addField, removeField }) {
     
-    // console.log(content, property)
-    // function addField() {
-    //     // const newField = [...content]
-    //     // // newField.push(schema)
-    //     // newField.push('');
-    //     // context.setContent({ ...context.content, [property]: newField });   
-    //     // console.log(cont)
+    const context = useContext(FormContext);
+    
+    // function addField(k) {
+    //     const newField = [...content];
+    //     // let obj = { ...context.content };
+    //     // obj[property]
+    //     // newField.push(schema)
+    //     newField.push({ label: 'nada', status: false });
+        
+    //     context.setContent({ ...context.content, [property]: newField });
+    //     console.log(context.content)   
     // }
 
-    function removeField(k) {
-        const field = [...content];
-        field.splice(k, 1);
-        setContent({ ...context.content, [property]: field })
-        console.log('hello')
-    };
-    // console.log(content[property])
+
+    // function removeField() {
+    //     const field = [...content];
+    //     field.splice(0,1);
+    //     context.setContent({ ...context.content, [property]: field })
+    //     console.log(context.content[property])
+    // };
     
 
+
+    
 
     return (
         <div className="list-row" >
             <p>{
-                schema.type
+                schema.title ? schema.title : schema.type ? schema.type : null
             }</p>
 
-            <button className="add-button" onClick={()=> addField(content)}>+</button>
-            
+            <button className="add-button" onClick={() => addField(content, property, schema.maxItems)}>+</button>
+
+            <button onClick={() => removeField(content, property)}>x</button>
+
             <div className="list-values" >
-                
                 {
                     Object.keys(schema).map((item, key) => {
-                        // console.log({
-                        //     content: content,
-                        //     item: item,
-                        //     valueItem: value[item],
-                        //     value: value,
-                        // })
-
                         switch (schema[item].type) {
                             
                             case 'string':
                                  return <PlainText
                                     key={key}
-                                     schema={schema[item]}
-                                     valueType={schema[item].type}
+                                    k={key}
+                                    schema={schema[item]}
+                                    valueType={schema[item].type}
                                     content={content}
-                                    property={item}
+                                    property={property}
+                                    handleChange={handleChange}
                                  />
                           
 
                             case 'object':
                                 return content instanceof Array ? content.map(cont => (
-                                    
                                     <ContentObject
                                         properties={schema[item].properties}
                                         key={key}
                                         valueType={schema[item].type}
                                         content={cont ?? null}
+                                        
                                     />
-
                                 )) : 
                                     (
                                         <ContentObject
@@ -90,7 +89,7 @@ function ListContainer({ schema, valueType, property, content, setContent, type,
     )
 }
 
-export default ListContainer
+export default ArrayContainer
 
         // {
         //     content ? Object.keys(content).map((item, key) => (
