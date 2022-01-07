@@ -1,14 +1,15 @@
 import { createContext, useEffect, useState } from "react";
 import SchemaJson from './Schema.json'
+
 const FormContext = createContext({});
 
 export const FormProvider = ({ children }) => {
-    const [schema, setSechema] = useState(null);
-    useEffect(() => {
-        setSechema(SchemaJson)
-    }, [])
-    const { type, properties } = schema ?? {};
-    const [formData, setFormData] = useState(null)
+    // const [schema, setSechema] = useState(null);
+    // useEffect(() => {
+    //     setSechema(SchemaJson)
+    // }, [])
+    // const { type, properties } = schema ?? {};
+    // const [formData, setFormData] = useState(null)
     
     // async function HandleChange(e, valueType) {
     //     Object.values(properties).forEach((val, k) => {
@@ -32,25 +33,7 @@ export const FormProvider = ({ children }) => {
     //    console.log(content);
     // }
 
-    const [content, setContent] = useState({
-        // "name": "João Marciano Neto",
-        // "address": 'Rua Fernando Neto',
-        // "active": true,
-        // "list": ['Livros', 'Bolos'],
-        // "someOption": "B",
-        // "identifier": 32,
-        // "objectList": [
-        //     {
-        //         "status": false,
-        //         "label": 'casa verde',
-        //     },
-        //     {
-        //         "status": true,
-        //         "label": 'casa vermelha',
-        //     }
-          
-        // ]
-            
+    const [content, setContent] = useState({     
         "list": [
             "azul",
             "vermelho"
@@ -58,11 +41,11 @@ export const FormProvider = ({ children }) => {
         "more": {
             "objectList": [
                 {
-                    "status": false,
+                    "status": true,
                     "label": "vida noturna"
                 },
                 {
-                    "status": true,
+                    "status": false,
                     "label": "gosta de bar"
                 }
             ],
@@ -72,13 +55,12 @@ export const FormProvider = ({ children }) => {
         "name": "Carlos Moreira",
         "address": "admin@admin.com",
         "active": true
-            
-            
+    
     })
-
+   
     
     return (
-        <FormContext.Provider value={{content, setContent,}} >
+        <FormContext.Provider value={{ content, setContent}} >
             {children}
         </FormContext.Provider>
     )

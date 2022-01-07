@@ -1,42 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react'
 import FormContext from '../../context/FormContext';
-import PlainText from './PlainText';
-import ContentObject from '../ContentObject';
+import StringContainer from './StringContainer';
+import ObjectContainer from './ObjectContainer';
 import './../../styles/values/ListContainer.scss'
 import CheckBox from './CheckBox';
+import { v4 as uuid } from 'uuid';
 
 function ArrayContainer({ schema, valueType, property, content, setContent, type, handleChange, addField, removeField }) {
-    
     const context = useContext(FormContext);
-    
-    // function addField(k) {
-    //     const newField = [...content];
-    //     // let obj = { ...context.content };
-    //     // obj[property]
-    //     // newField.push(schema)
-    //     newField.push({ label: 'nada', status: false });
-        
-    //     context.setContent({ ...context.content, [property]: newField });
-    //     console.log(context.content)   
-    // }
-
-
-    // function removeField() {
-    //     const field = [...content];
-    //     field.splice(0,1);
-    //     context.setContent({ ...context.content, [property]: field })
-    //     console.log(context.content[property])
-    // };
-    
-
-
-    
+    const unique_id = uuid();
 
     return (
         <div className="list-row" >
-            <p>{
+            <p>
+                {
                 schema.title ? schema.title : schema.type ? schema.type : null
-            }</p>
+                }
+            </p>
 
             <button className="add-button" onClick={() => addField(content, property, schema.maxItems)}>+</button>
 
@@ -46,10 +26,20 @@ function ArrayContainer({ schema, valueType, property, content, setContent, type
                 {
                     Object.keys(schema).map((item, key) => {
                         switch (schema[item].type) {
-                            
                             case 'string':
-                                 return <PlainText
+                                return content instanceof Object ? Object.keys(content).map(cont => (
+                                    <StringContainer
+                                        key={key}
+                                        id={unique_id}
+                                        k={cont}
+                                        schema={schema[item]}
+                                        valueType={schema[item].type}
+                                        content={content[cont]}
+                                        property={property}
+                                        handleChange={handleChange} />
+                                )) :                                   <StringContainer
                                     key={key}
+                                    id={unique_id}
                                     k={key}
                                     schema={schema[item]}
                                     valueType={schema[item].type}
@@ -58,10 +48,9 @@ function ArrayContainer({ schema, valueType, property, content, setContent, type
                                     handleChange={handleChange}
                                  />
                           
-
                             case 'object':
                                 return content instanceof Array ? content.map(cont => (
-                                    <ContentObject
+                                    <ObjectContainer
                                         properties={schema[item].properties}
                                         key={key}
                                         valueType={schema[item].type}
@@ -70,7 +59,7 @@ function ArrayContainer({ schema, valueType, property, content, setContent, type
                                     />
                                 )) : 
                                     (
-                                        <ContentObject
+                                        <ObjectContainer
                                         properties={schema[item].properties}
                                         key={key}
                                         valueType={schema[item].type}
@@ -78,13 +67,13 @@ function ArrayContainer({ schema, valueType, property, content, setContent, type
                                         />
                                     )
                             default:
+                                return null;
                               
                         }
                     })
                 }
             </div>
-                {/* <button onClick={() => removeField()}>X</button> */}
-
+               
         </div>
     )
 }

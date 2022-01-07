@@ -1,13 +1,12 @@
 import React, { useContext } from 'react'
-import FormContext from '../../context/FormContext'
+import { v4 as uuid } from 'uuid';
 
 function IntergerContainer({ schema, valueType, k, content, property, handleChange }) {
-    const context = useContext(FormContext)
-    // console.log(content)
+    const unique_id = uuid();
     return (
         <div style={{ width: '3em' }}>
             {schema ? <p>{schema.type} </p> : 'null'}
-            <input type="number" placeholder="0" value={content} onChange={(e) => handleChange(e, property, k, valueType)} />
+            <input id={unique_id} type="number" placeholder="0" value={content} onChange={(e) => handleChange(e, property, k, valueType)} />
         </div>
     )
 }

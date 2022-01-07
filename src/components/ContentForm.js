@@ -2,7 +2,7 @@ import React,{useState, useEffect, useContext} from 'react'
 import '../styles/ContentItem.scss'
 
 import SchemaJson from '../context/Schema.json'
-import ContentObject from './ContentObject';
+import ObjectContainer from './values/ObjectContainer';
 import FormContext from '../context/FormContext';
 
 
@@ -52,7 +52,7 @@ function ContentItem() {
 
             } */}
 
-            {type === 'object' ? (<div className="form" > <ContentObject content={context.content} setContent={context.setContent} properties={properties}  /> </div>) : 'não é objeto'}
+            {type === 'object' ? (<div className="form" > <ObjectContainer content={context.content} setContent={context.setContent} properties={properties}  /> </div>) : 'não é objeto'}
            
         </section>
     )
