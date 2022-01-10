@@ -1,6 +1,8 @@
 import React, {useState, useContext, useEffect} from 'react'
 import '../../styles/ContentObject.scss'
+
 import FormContext from '../../context/FormContext';
+import HandleChange from '../functions/HandleChange';
 
 import StringContainer from './StringContainer';
 import Checkbox from './CheckBox';
@@ -24,64 +26,26 @@ function ObjectContainer({
 
     const unique_id = uuid();
     
-    
-    async function handleChange(e, value, prop, k, cont, id, fullContent) {
-        e.preventDefault();      
-        let obj = content[prop] ? content[prop] : {};
-        let data = context.content;
+    async function handleChange(
+        e,
+        schema,
+        content,
+        prop,
+        value,
+        id,
+        key) {
         
-        // console.log(prop)
-        
-        Object.keys(properties).map(keyName => {
-            if (prop == keyName) {
-                let foundKey = Object.keys(data).find(i => i === keyName);
-                let text;
-                text = value
-                setContent(prevState => {
-                    const newState = {
-                        ...prevState, [prop]:[...prevState[prop], text]
-                    }
-                    return newState
-                })
-                console.log(context.content)
-            } else {
-
+        context.setContent(prevState => ({
+            ...prevState,
+            [prop]: {
+                ...prevState,
+                value
             }
         })
-        
-        if (obj = properties) {
-            
-            // console.log(properties);
-        }
+        );
 
-        // if (content[prop]) {
-        //     Object.keys(data).map((propty, index) => {
-        //         if (propty == prop ) { 
-        //             // let a = context.content[prop]
-        //             // a[k] = value;
-        //             // context.setContent({ ...context.content, [prop]: a });
-        //             console.log([propty]);
-        //         } else {
-        //             // Object.keys(data[propty]).map(i=> console.log(i))
-        //         }
-        //     });
-        // }
+    }
 
-        // if (content[prop] instanceof Object) {
-        //     Object.keys(data).map(key => {
-        //         let a = context.content[prop]
-        //         a[k] = value;
-        //         if (k === key) {
-        //             context.setContent({ ...context.content, [prop]: a });
-        //             console.log(context.content[prop]);
-        //         }
-        //     })
-        // } else {
-            
-
-        // }
-    
-    };
 
 
     function addField(cont, prop, maxItems) {
@@ -155,19 +119,21 @@ function ObjectContainer({
                             <OptionsBox
                                 key={key}
                                 k={key}
-                                schema={properties[value]}
+                                schema={schema}
+                                schemaValue={properties[value]}
                                 valueType={properties[value].type}
                                 content={content ? content[value] : null}
                                 fullContent={content ? content : null}
                                 property={value}
-                                handleChange={handleChange}
+                                handleChange={context.handleChange}
 
                             />
                             :
                             <StringContainer
                                 key={key}
                                 k={key}
-                                schema={properties[value]}
+                                schema={schema}
+                                schemaValue={properties[value]}
                                 valueType={properties[value].type}
                                 content={content ? content[value] : null}
                                 fullContent={content ? content : null}
@@ -180,7 +146,8 @@ function ObjectContainer({
                                 key={key}
                                 k={key}
                                 id={unique_id}
-                                schema={properties[value]}
+                                schema={schema}
+                                schemaValue={properties[value]}
                                 valueType={properties[value].type}
                                 content={content ? content[value] : null}
                                 property={value}
@@ -193,7 +160,8 @@ function ObjectContainer({
                         key={key}
                         k={key}
                         id={unique_id}
-                        schema={properties[value]}
+                        schema={schema}
+                        schemaValue={properties[value]}
                         valueType={properties[value].type}
                         content={content ? content[value] : null}
                         setContent={setContent}
@@ -208,7 +176,8 @@ function ObjectContainer({
                         return <IntergerContainer
                             key={key}
                             k={key}
-                            schema={properties[value]}
+                            schema={schema}
+                            schemaValue={properties[value]}
                             valueType={properties[value].type}
                             content={content ? content[value] : null}
                             property={value}
@@ -219,7 +188,8 @@ function ObjectContainer({
                                 key={key}
                                 k={key}
                                 id={unique_id}
-                                schema={properties[value]}
+                                schemaValue={properties[value]}
+                                schema={schema}
                                 properties={properties[value].properties}
                                 valueType={properties[value].type}
                                 content={content[value]}
