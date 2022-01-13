@@ -4,13 +4,6 @@ import SchemaJson from './Schema.json'
 const FormContext = createContext({});
 
 export const FormProvider = ({ children }) => {
-    // const [schema, setSechema] = useState(null);
-    // useEffect(() => {
-    //     setSechema(SchemaJson)
-    // }, [])
-    // const { type, properties } = schema ?? {};
-    // const [formData, setFormData] = useState(null)
-    
     // async function HandleChange(e, valueType) {
     //     Object.values(properties).forEach((val, k) => {
     //         if (valueType == val.type) {
@@ -32,6 +25,18 @@ export const FormProvider = ({ children }) => {
         
     //    console.log(content);
     // }
+
+    async function HandleChange(e,
+        schema,
+        content,
+        label,
+        value,
+        key,
+        id) {
+        
+        console.log(schema);
+        
+    }
 
     const [content, setContent] = useState({     
         "list": [
@@ -60,7 +65,7 @@ export const FormProvider = ({ children }) => {
    
     
     return (
-        <FormContext.Provider value={{ content, setContent}} >
+        <FormContext.Provider value={{ content, setContent, HandleChange}} >
             {children}
         </FormContext.Provider>
     )

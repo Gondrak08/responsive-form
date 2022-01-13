@@ -6,64 +6,75 @@ import './../../styles/values/ListContainer.scss'
 import CheckBox from './CheckBox';
 import { v4 as uuid } from 'uuid';
 
-function ArrayContainer({ schema, valueType, property, content, setContent, type, handleChange, addField, removeField }) {
+function ArrayContainer({ schema, schemaValue, valueType, property, content, setContent, type, handleChange, addField, removeField }) {
     const context = useContext(FormContext);
     const unique_id = uuid();
+
 
     return (
         <div className="list-row" >
             <p>
                 {
-                schema.title ? schema.title : schema.type ? schema.type : null
+                    schemaValue.title ? schemaValue.title : schemaValue.type ? schemaValue.type : null
                 }
             </p>
 
-            <button className="add-button" onClick={() => addField(content, property, schema.maxItems)}>+</button>
+            <button className="add-button" onClick={() => addField(content, property, schemaValue.maxItems)}>+</button>
 
             <button onClick={() => removeField(content, property)}>x</button>
 
-            <div className="list-values" >
+            <form className="list-values" >
                 {
-                    Object.keys(schema).map((item, key) => {
-                        switch (schema[item].type) {
+                    Object.keys(schemaValue).map((item, key) => {
+                        switch (schemaValue[item].type) {
                             case 'string':
                                 return content instanceof Object ? Object.keys(content).map(cont => (
                                     <StringContainer
                                         key={key}
                                         id={unique_id}
                                         k={cont}
-                                        schema={schema[item]}
-                                        valueType={schema[item].type}
+                                        schema={schema}
+                                        schemaValue={schemaValue[item]}
+                                        valueType={schemaValue[item].type}
                                         content={content[cont]}
                                         property={property}
                                         handleChange={handleChange} />
-                                )) :                                   <StringContainer
+                                )) :
+                                <StringContainer
                                     key={key}
                                     id={unique_id}
                                     k={key}
-                                    schema={schema[item]}
-                                    valueType={schema[item].type}
+                                    schema={schema}
+                                    schemaValue={schemaValue[item]}
+                                    valueType={schemaValue[item].type}
                                     content={content}
                                     property={property}
                                     handleChange={handleChange}
                                  />
                           
                             case 'object':
-                                return content instanceof Array ? content.map(cont => (
+                                return content instanceof Array ? content.map((cont, index) => (
+                                    // console.log(cont, index),
                                     <ObjectContainer
-                                        properties={schema[item].properties}
-                                        key={key}
-                                        valueType={schema[item].type}
+                                        properties={schemaValue[item].properties}
+                                        key={index}
+                                        k={index}
+                                        schema={schema}
+                                        valueType={schemaValue[item].type ?? null}
                                         content={cont ?? null}
-                                        
+                                        property={property}
+
                                     />
                                 )) : 
                                     (
                                         <ObjectContainer
-                                        properties={schema[item].properties}
+                                        properties={schemaValue[item].properties}
                                         key={key}
-                                        valueType={schema[item].type}
+                                        schema={schema}
+                                        // valueType={schema[item].type ?? null }
                                         content={content ? content : null}
+                                        property={property}
+
                                         />
                                     )
                             default:
@@ -72,7 +83,7 @@ function ArrayContainer({ schema, valueType, property, content, setContent, type
                         }
                     })
                 }
-            </div>
+            </form>
                
         </div>
     )

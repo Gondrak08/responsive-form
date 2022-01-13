@@ -39,21 +39,16 @@ function ContentItem() {
 
     })
 
-    // if (properties) {
-        
-    //     Object.keys(properties).map(value=>{console.log(content[value])})
-    // }
     return (
         <section className="content-display" >
-            {/* {
-               properties ? Object.keys(properties).map((key) => (
-                   properties[key].type === 'object' ? <ContentObject properties={properties} property={key} key={key} /> : null
-                    )) : null
-
-            } */}
-
-            {type === 'object' ? (<div className="form" > <ObjectContainer content={context.content} setContent={context.setContent} properties={properties}  /> </div>) : 'não é objeto'}
-           
+            {type === 'object' ? (<div className="form" >
+                <ObjectContainer
+                    content={context.content}
+                    setContent={context.setContent}
+                    properties={properties}
+                    schema={schema}
+                />
+            </div>) : 'não é objeto'}           
         </section>
     )
 }
