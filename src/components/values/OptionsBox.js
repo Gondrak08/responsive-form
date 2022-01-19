@@ -8,13 +8,27 @@ function OptionsBox({ k, schema, schemaValue, valueType, content, property, hand
     return (
         <div className="options-box" >
             {valueType ? (<p> {valueType} </p>) : null}
-            <select id={unique_id} className="options-box" style={{ width: '10%' }} defaultValue={content} name="" id="" onChange={(e) => handleChange(e, property, k, valueType)} >
+            <select id={unique_id} className="options-box" style={{ width: '10%' }}
+                defaultValue={content}
+                selected={content ? content : null}
+                name="" id=""
+                onChange={(e) => handleChange(
+                e,
+                schema,
+                content,
+                property,
+                e.target.value,
+                e.target.id,
+                k,
+                valueType
+            )} >
                 
                 {
                         schemaValue.enum.length > 0 ?
                         schemaValue.enum.map((option, key) =>
+                        
                         (
-                        <option id={unique_id}   key={key}  value={option} selected={content ? content : null}  >{option}</option> )
+                            <option id={unique_id} key={key} >{option}</option> )
                         )
                         : ''
                 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import FormContext from '../../context/FormContext';
 import StringContainer from './StringContainer';
 import ObjectContainer from './ObjectContainer';
@@ -6,9 +6,17 @@ import './../../styles/values/ListContainer.scss'
 import CheckBox from './CheckBox';
 import { v4 as uuid } from 'uuid';
 
-function ArrayContainer({ schema, schemaValue, valueType, property, content, setContent, type, handleChange, addField, removeField }) {
+function ArrayContainer({ schema, schemaValue, valueType, property, content, setContent, type, handleChange, addField, removeField, k }) {
     const context = useContext(FormContext);
+    const dagItem = useRef();
     const unique_id = uuid();
+
+
+
+    const handleDragDrop = (e,params) => {
+        console.log(e, params)
+    }
+    // console.log(k)
 
 
     return (
@@ -19,11 +27,11 @@ function ArrayContainer({ schema, schemaValue, valueType, property, content, set
                 }
             </p>
 
-            <button className="add-button" onClick={() => addField(content, property, schemaValue.maxItems)}>+</button>
+            <button className="add-button" onClick={(e) => addField(e, content, property, schemaValue.maxItems)}>+</button>
 
             <button onClick={() => removeField(content, property)}>x</button>
 
-            <form className="list-values" >
+            <form className="list-values"  >
                 {
                     Object.keys(schemaValue).map((item, key) => {
                         switch (schemaValue[item].type) {
@@ -38,7 +46,11 @@ function ArrayContainer({ schema, schemaValue, valueType, property, content, set
                                         valueType={schemaValue[item].type}
                                         content={content[cont]}
                                         property={property}
-                                        handleChange={handleChange} />
+                                        handleChange={handleChange}
+                                        onDragStart={(e) => handleDragDrop(e, (k, key))}
+                                        draggable
+
+                                    />
                                 )) :
                                 <StringContainer
                                     key={key}
@@ -50,6 +62,9 @@ function ArrayContainer({ schema, schemaValue, valueType, property, content, set
                                     content={content}
                                     property={property}
                                     handleChange={handleChange}
+                                    onDragStart={(e) => handleDragDrop(e, (k, key))}
+                                    draggable
+
                                  />
                           
                             case 'object':
@@ -63,6 +78,8 @@ function ArrayContainer({ schema, schemaValue, valueType, property, content, set
                                         valueType={schemaValue[item].type ?? null}
                                         content={cont ?? null}
                                         property={property}
+                                        onDragStart={(e) => handleDragDrop(e, ( k, index ))}
+                                        draggable
 
                                     />
                                 )) : 

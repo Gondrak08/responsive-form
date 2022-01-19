@@ -1,5 +1,6 @@
-import React,{useContext} from 'react'
+import React,{useContext, useEffect} from 'react'
 import FormContext from '../../context/FormContext'
+import FunctionsContext from '../../context/functions/FunctionsContext';
 import './../../styles/values/PlainText.scss'
 import { v4 as uuid } from 'uuid';
 
@@ -7,8 +8,14 @@ import { v4 as uuid } from 'uuid';
 
 function PlainText({ k, id, schema, schemaValue, valueType,  content, fullContent, property, handleChange }) {
     const context = useContext(FormContext)
+  
+
+
+
+
     const unique_id = uuid();
-    
+    // console.log(property);
+    context.setTag(property)
     return (
         <>
         {
@@ -24,6 +31,7 @@ function PlainText({ k, id, schema, schemaValue, valueType,  content, fullConten
                     <input
                         id={unique_id}
                         defaultValue={content}
+                        // value={content}
                         key={k}
                         type={schemaValue.type}
                         name={property}
@@ -38,7 +46,8 @@ function PlainText({ k, id, schema, schemaValue, valueType,  content, fullConten
                             e.target.id,
                             k,
                             valueType
-                            )}
+                        )}
+                            draggable
                         />
 
                 </div>

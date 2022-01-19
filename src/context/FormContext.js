@@ -4,39 +4,14 @@ import SchemaJson from './Schema.json'
 const FormContext = createContext({});
 
 export const FormProvider = ({ children }) => {
-    // async function HandleChange(e, valueType) {
-    //     Object.values(properties).forEach((val, k) => {
-    //         if (valueType == val.type) {
-    //             let value;
-    //             switch (valueType) {
-    //                 case 'boolean':
-    //                     value = e.target.checked;
-    //                     break;
-    //                 case 'string':
-    //                     value = e.target.value;
-    //                     break;
-    //                 default:
-    //                     value = e.target.value;
-    //                     break;
-    //             }
-    //             setContent({...content, value},)
-    //         }
-    //     })
-        
-    //    console.log(content);
-    // }
+    const [state, setState] = useState({
+        property: null,
+        prop: null,
+        cont: null,
+    });
+    console.log(state);
 
-    async function HandleChange(e,
-        schema,
-        content,
-        label,
-        value,
-        key,
-        id) {
-        
-        console.log(schema);
-        
-    }
+    const [tag, setTag] = useState({});
 
     const [content, setContent] = useState({     
         "list": [
@@ -65,7 +40,7 @@ export const FormProvider = ({ children }) => {
    
     
     return (
-        <FormContext.Provider value={{ content, setContent, HandleChange}} >
+        <FormContext.Provider value={{ content, setContent, state, setState, tag, setTag,}} >
             {children}
         </FormContext.Provider>
     )
