@@ -1,4 +1,4 @@
-import React,{useState, useEffect, useContext} from 'react'
+import React,{useState, useEffect, useRef, useContext} from 'react'
 import '../styles/ContentItem.scss'
 
 import SchemaJson from '../context/Schema.json'
@@ -15,40 +15,27 @@ function ContentItem() {
     // console.log(schema);
     const { type, properties } = schema ?? {};
 
-    const [content, setContent] = useState({
-        "name": "João Marciano Neto",
-        "address": 'Rua Fernando Neto',
-        "active": true,
-        "list": ['Livros', 'Bolos'],
-        "someOption": "B",
-        "identifier": 32,
-        "objectList": [
-            {
-                "status": false,
-                "label": 'casa verde',
-            },
-             {
-                "status": false,
-                "label": 'casa vermelho',
-            }
-        ]
 
-
-
-
-
-    })
+    function handleSubmit(e) {
+        alert(JSON.stringify(context.content, undefined, 12))
+        e.preventDefault();
+    }
 
     return (
         <section className="content-display" >
-            {type === 'object' ? (<div className="form" >
-                <ObjectContainer
-                    content={context.content}
-                    setContent={context.setContent}
-                    properties={properties}
-                    schema={schema}
-                />
-            </div>) : 'não é objeto'}           
+            {type === 'object' ? (
+                <form className="form" onSubmit={(e) => handleSubmit(e)} >
+                    <ObjectContainer
+                        content={context.content}
+                        setContent={context.setContent}
+                        properties={properties}
+                        schema={schema}
+                    />
+                    <button type="submit"  className="btn-submit"  >
+                    Submit content
+                    </button>
+            </form>) : 'não é objeto'}
+            
         </section>
     )
 }

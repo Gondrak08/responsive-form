@@ -1,3 +1,24 @@
+.array-container{
+     button{
+        // height: 2em;
+        // width: 2em;
+        text-align: center;
+        color:white;
+        background-color: rgb(77, 77, 255);
+        border:none;
+        cursor: pointer;
+       
+    }
+    .add-button{
+        max-width: 10em ;
+        width: 100%;
+    }
+    .delete-button{
+        // background-color: rgb(243, 69, 69);
+        color: white;
+        border: none;
+        font-size: 12px;
+    }
 .list-row{
     display: flex;
     justify-content: space-between;
@@ -6,35 +27,21 @@
     margin:1em 0;
     padding:10px 0;
     
-    button{
-        height: 2em;
-        width: 2em;
-        text-align: center;
-        color:white;
-        background-color: rgb(77, 77, 255);
-        border:none;
-        cursor: pointer;
-        &.add-button{
-
-        }
-    }
-
-    .delete-button{
-        background-color: rgb(243, 69, 69);
-        color: white;
-        border: none;
-        font-size: 12px;
-    }
+   
 
 
     .list-values{
         display: flex;
         flex-direction: column;
         gap: 15px;
-        width: 90%;
+        width: 100%  !important;
+        // height: none;
+
         height: auto;
-        border: 1px solid black;
+        border: 0 solid black;
         padding: 10px 10px 10px 5px;
+        // transition: border 1s ease-in;
+
         
         .values{
             display: flex;
@@ -53,5 +60,11 @@
         
        
     }
+    #active{
+        // height: auto;
+        // transition: border 1s ease-out;
+        border: 1px solid black;
+    }
+   
 }   
-
+}

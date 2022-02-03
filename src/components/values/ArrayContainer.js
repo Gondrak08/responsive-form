@@ -1,217 +1,185 @@
-import React, { useState, useEffect, useRef, useContext } from 'react'
+import React, { useRef, useState, useContext, useEffect } from 'react'
 import FormContext from '../../context/FormContext';
 import StringContainer from './StringContainer';
 import ObjectContainer from './ObjectContainer';
 import './../../styles/values/ListContainer.scss'
-import CheckBox from './CheckBox';
 import { v4 as uuid } from 'uuid';
 
-function ArrayContainer({ schema, schemaValue, valueType, property, content, setContent, type, handleChange, addField, removeField, k }) {
-    const context = useContext(FormContext);
-    const dagItem = useRef();
+import { MdAdd, MdDelete } from 'react-icons/md'
+
+function ArrayContainer({ schema, schemaValue, maxItems, valueType, property, content, setContent, type, handleChange, addField, removeField, k, indexRef, objList, setObjList }) {
     const unique_id = uuid();
+    const context = useContext(FormContext);
+    
+    const [keyList, setKeyList] = useState(null)
+    const [dragging, setDragging] = useState(false);
+    const dragItem = useRef();
+    const dragNode = useRef();
+  
 
+    
 
-
-    const handleDragDrop = (e,params) => {
-        console.log(e, params)
+    const handleDragStart = (e, params) => {
+        
+        dragNode.current = e.target;
+        dragNode.current.addEventListener('dragend', handleDragDrop)
+        dragItem.current = params;
+        // console.log(dragItem.current, dragNode.current)
+        setTimeout(() => {
+            setDragging(true);
+        }, 0)
     }
-    // console.log(k)
+    
+    const handleDragEnter = (e, targetItem) => {
+        const obj = {...context.content}
+       
+        if (dragNode.current !== e.target) {
+            context.setContent((state) => {
+                let newList = JSON.parse(JSON.stringify(state[property]))
+                newList.splice(targetItem.item, 0, newList.splice(dragItem.current, 1)[0])
+                
+                obj[property] = newList
+                dragItem.current = targetItem;
+                return {...obj}
+            })
+                // let newList = JSON.parse(JSON.stringify(content));
+                // newList.splice(targetItem, 0, newList.splice(dragItem.current, 1)[0])
+                // obj[property] = newList
+                // context.setContent(obj)
+            }
+        
+        console.log(context.content)
+        // let currentItem = dragItem.current;
+        // const obj = {...context.content}
+        // if (dragItem.current!== e.target) {
+        //     let newList = JSON.parse(JSON.stringify(content));
+        //     newList.splice(targetItem, 0, newList.splice(currentItem, 1)[0])
 
+        //     dragItem.current = targetItem;
+        //     obj[property] = newList;
+        //     context.setContent(obj)
+        //     console.log(context.content)   
+        // }
+
+
+    }
+
+    const handleDragDrop = (e, params) => {
+        setDragging(false);
+        dragItem.current = null;
+        dragNode.current.removeEventListener('dragend', handleDragDrop)
+        dragNode.current = null;
+        
+    }
+
+    console.log({
+        content: content,
+        context: context.content
+    })
 
     return (
+        <section className="array-container">
+            {
+                content && maxItems ?
+                    content.length < maxItems ? (
+                        <>
+                            <button type="button"
+                                className="add-button"
+                                onClick={(e) => addField(e, content, property, schemaValue.maxItems)}
+                            ><MdAdd size={24} color="#fff" />
+                            </button>
+
+                        </>
+                    ) : null
+                    : (
+                        <>
+                            <button type="button"
+                                className="add-button"
+                                onClick={(e) => addField(e, content, property, schemaValue.maxItems)}
+                            ><MdAdd size={24} color="#fff" />
+                            </button>
+
+                        </>
+                    )
+            }
         <div className="list-row" >
-            <p>
+            {/* <p>
                 {
                     schemaValue.title ? schemaValue.title : schemaValue.type ? schemaValue.type : null
                 }
-            </p>
-
-            <button className="add-button" onClick={(e) => addField(e, content, property, schemaValue.maxItems)}>+</button>
-
-            <button onClick={() => removeField(content, property)}>x</button>
-
-            <form className="list-values"  >
+            </p> */}
+            {
+                content && content.length > 0 ? (
+                    <button type="button"
+                        className="delete-button"
+                        onClick={(e) => removeField(e, content, property)}
+                    > <MdDelete size={24} color="#fff" />
+                    </button>
+                ) : null
+            }
+           
+                <form className="list-values" id={content && content.length > 0 ? "active" : null}
+                    onDragEnter={dragging && [content].length ? (e) => { handleDragEnter(e,k) } : null}  >
                 {
-                    Object.keys(schemaValue).map((item, key) => {
-                        switch (schemaValue[item].type) {
+                    
+                        Object.keys(schemaValue).map((item, key) => {
+                        
+                            switch (schemaValue[item].type) {
                             case 'string':
-                                return content instanceof Object ? Object.keys(content).map(cont => (
-                                    <StringContainer
-                                        key={key}
-                                        id={unique_id}
-                                        k={cont}
-                                        schema={schema}
-                                        schemaValue={schemaValue[item]}
-                                        valueType={schemaValue[item].type}
-                                        content={content[cont]}
-                                        property={property}
-                                        handleChange={handleChange}
-                                        onDragStart={(e) => handleDragDrop(e, (k, key))}
-                                        draggable
-
-                                    />
-                                )) :
+                            return content instanceof Object ? Object.keys(content).map(cont => (
+                                indexRef.current = cont,
                                 <StringContainer
                                     key={key}
                                     id={unique_id}
-                                    k={key}
+                                    k={cont}
                                     schema={schema}
                                     schemaValue={schemaValue[item]}
                                     valueType={schemaValue[item].type}
-                                    content={content}
+                                    content={content[cont]}
                                     property={property}
                                     handleChange={handleChange}
-                                    onDragStart={(e) => handleDragDrop(e, (k, key))}
-                                    draggable
+                                    handleDragStart={handleDragStart}
+                                    handleDragEnter={handleDragEnter}
+                                    handleDragDrop={handleDragDrop}
+                                    dragging={dragging}
+                                    
 
-                                 />
-                          
+                                />
+                            )) : null        
                             case 'object':
-                                return content instanceof Array ? content.map((cont, index) => (
-                                    // console.log(cont, index),
-                                    <ObjectContainer
-                                        properties={schemaValue[item].properties}
-                                        key={index}
-                                        k={index}
-                                        schema={schema}
-                                        valueType={schemaValue[item].type ?? null}
-                                        content={cont ?? null}
-                                        property={property}
-                                        onDragStart={(e) => handleDragDrop(e, ( k, index ))}
-                                        draggable
-
-                                    />
-                                )) : 
-                                    (
-                                        <ObjectContainer
-                                        properties={schemaValue[item].properties}
-                                        key={key}
-                                        schema={schema}
-                                        // valueType={schema[item].type ?? null }
-                                        content={content ? content : null}
-                                        property={property}
-
-                                        />
-                                    )
-                            default:
-                                return null;
-                              
-                        }
+                            return content instanceof Object ? Object.keys(content).map((cont, index) => (
+                                indexRef.current = index,
+                                <ObjectContainer
+                                    properties={schemaValue[item].properties}
+                                    key={index}
+                                    k={index}
+                                    schema={schema}
+                                    valueType={schemaValue[item].type ?? null}
+                                    content={content[cont] ?? null}
+                                    property={property}
+                                    handleDragStart={handleDragStart}
+                                    handleDragEnter={handleDragEnter}
+                                    handleDragDrop={handleDragDrop}
+                                    dragging={dragging}
+                                />
+                            )) :
+                                (
+                                    setObjList(schemaValue[item].properties),
+                                    null
+                                )
+                        default:
+                            return null;
+                            
+                    }
                     })
-                }
+                 }
             </form>
                
         </div>
+        </section>
     )
 }
 
 export default ArrayContainer
 
-        // {
-        //     content ? Object.keys(content).map((item, key) => (
-        //         content[item] instanceof Object ?
-        //             Object.values(content[item]).map(val => (
-
-        //                 typeof val == 'string' ?
-        //                     (
-        //                         <div className="values">
-        //                             <PlainText
-        //                                 key={key}
-        //                                 k={key}
-        //                                 value={content[item]}
-        //                                 valueType={content[item].type}
-        //                                 content={val}
-        //                                 property={property}
-        //                                 handleChange={handleChange}
-        //                                 removeField={removeField}
-        //                             />
-                                    // <button className="delete-button"
-                                    //     onClick={() => removeField()}>
-                                    //     -
-                                    // </button>
-
-        //                         </div>
-        //                     ) : typeof val == 'object' ? Object.values(val).map((i) =>
-        //                         <div className="values">
-        //                             <PlainText
-        //                                 key={key}
-        //                                 k={key}
-        //                                 value={content[item]}
-        //                                 valueType={content[item].type}
-        //                                 content={i}
-        //                                 property={property}
-        //                                 removeField={removeField}
-        //                                 handleChange={handleChange}
-        //                             />
-        //                             <button className="delete-button"
-        //                                 onClick={() => removeField()}>
-        //                                 -
-        //                             </button>
-
-        //                         </div>
-        //                     )
-        //                         :
-        //                         <>
-        //                             <CheckBox value={content[item]} content={val} handleChange={handleChange} />
-        //                             {/* <button onClick={() => removeField()}>X</button> */}
-        //                         </>
-        //             ))
-
-        //             : (
-        //                 <div className="values">
-        //                     <PlainText
-        //                         key={key}
-        //                         k={key}
-        //                         value={content[item]}
-        //                         valueType={content[item].type}
-        //                         content={content[item]}
-        //                         property={property}
-        //                         removeField={removeField}
-        //                         handleChange={handleChange}
-        //                     />
-        //                     <button className="delete-button"
-        //                         onClick={() => removeField()}>
-        //                         -
-        //                     </button>
-        //                 </ div>
-        //             )
-
-        //     ))
-        //         :
-        //         Object.keys(value).map(item => (
-
-        //             value[item].type == 'string' ?
-        //                 (
-        //                     <PlainText
-        //                         value={value}
-        //                         valueType={value[item].type}
-        //                         content={null}
-        //                         property={property}
-        //                         removeField={removeField}
-        //                     />
-        //                 )
-        //                 : value[item].properties instanceof Object ?
-        //                     Object.keys(value[item].properties).map(val => {
-        //                         switch (value[item].properties[val].type) {
-        //                             case 'string':
-        //                                 return <PlainText
-        //                                     value={value[item].properties[val]}
-        //                                     valueType={value[item].properties[val].type}
-        //                                     content={null}
-        //                                     property={val}
-        //                                     removeField={removeField}
-        //                                 />
-        //                             case 'boolean':
-        //                                 return <CheckBox
-        //                                     value={value[item].properties[val]}
-        //                                     content={null} />
-
-        //                             default:
-        //                                 break;
-        //                         }
-        //                     }
-        //                     ) : null
-
-        //         ))
-        // }
+  

@@ -1,8 +1,7 @@
-import React, {useState, useContext, useEffect} from 'react'
+import React, {useRef, useContext,useState, useEffect} from 'react'
 import '../../styles/ContentObject.scss'
 
 import FormContext from '../../context/FormContext';
-import FunctionsContext from '../../context/functions/FunctionsContext';
 
 import StringContainer from './StringContainer';
 import Checkbox from './CheckBox';
@@ -20,153 +19,265 @@ function ObjectContainer({
     setContent,
     schema,
     valueType,
-    k }){
+    k,
+    handleDragStart,
+    handleDragEnter,
+    handleDragDrop,
+    dragging
+}) {
     
     const unique_id = uuid();
     const context = useContext(FormContext);
-    const contextFunctions = useContext(FunctionsContext);
+    const indexRef = useRef();
+    const [objList, setObjList] = useState({});
+    
 
 
-    // Handling data function:
-    async function handleChange(e, schema, content, prop, value, id, key,type){
-        Object.keys(schema).map(i => {
+
+    function handleChange(e, schema, content, prop, value, id, key, type) {
+         Object.keys(schema).map(i => {
             let obj = schema[i]
             if (obj instanceof Object) Object.keys(obj).map(label => {            
-                // ObjectContainer:
+                // Objects List:        
                 if (property) {
                     if (obj[label].type === 'object') {
-                        // ObjectList
-                        if (context.content[label][property]) {
-                            if (property && label && prop) {
-                                if (context.content[label][property].length > 0) {
-                                    context.setContent((prevState) => {
-                                        prevState[label][property][k][prop] = e.target.checked ? e.target.checked : value
-                                        return ({
-                                            ...prevState
+                        // if content is null
+                        if (Object.keys(context.content).length == 0) {
+                            if (label == property) {
+                                context.setContent([label][property] = {
+                                    [label]:{
+                                        [prop]: value
+                                    }
+                                        
+                                })
+                            }
+                            if (label !== property) {
+                                context.setContent([label][property] = {
+                                    [label]: {
+                                        [property]: [{}]
+                                    }
+                                })
+                                console.log(context.content)
+                            }
+                           
+                            
+                        } else {
+                            // if (context.content) {
+                            console.log('hiiooyyy')
+                            if (context.content[label][property]) {
+                                if (property && label && prop) {
+                                    if (context.content[label][property].length > 0) {
+                                        context.setContent((prevState) => {
+                                            prevState[label][property][k][prop] =  value
+                                            return ({
+                                                ...prevState
+                                            })
                                         })
-                                    })
-                                    console.log(context.content[label][property]);
-                                } else {
-                                    context.setContent((prevState) => {
-                                        prevState[label][property][prop] = value ? value : e.target.checked
-                                        return ({
-                                            ...prevState
+                                        console.log(context.content[label][property]);
+                                    } else {
+                                        context.setContent((prevState) => {
+                                            prevState[label][property][prop] = value
+                                            return ({
+                                                ...prevState
+                                            })
                                         })
-                                    })
+                                       
+                                    }
                                 }
                             }
-                        } else {
-                            context.setContent((state) => {
-                                state[property][prop] = value || value;
-                                return({...state})
-                            })
-                           console.log(context.content[property])
+                            else {
+                                context.setContent((state) => {
+                                    state[property][prop] = value || value;
+                                    return ({ ...state })
+                                })
+                                console.log(context.content[property])
+                                
+                            }
                         }
+
+
                     }
                 }
 
 
                 if (!property) {
-                    // ArrayContainer
+                    // Arrays List
                     if (context.content[prop] instanceof Object) {
                         context.setContent((state) => {
                             state[prop][key] = value;
                             return ({ ...state });
                         })
-                        console.log(context.content);
+                        // console.log(context.content, 'array');
                     } else {
                         switch (type) {
                             case 'boolean':
-                                context.setContent((state) => {
+                               return context.setContent((state) => {
                                     state[prop] = value;
                                     return ({ ...state })
-                                })
-                                console.log(context.content[prop])
-                                break;
+                                }),
+                                console.log(context.content)
+                                
                             case 'string':
-                                context.setContent((state) => {
+                                return context.setContent((state) => {
                                     state[prop] = value;
                                     return ({ ...state });
-                                })
-                                break;
+                                }),
+                                console.log(context.content)
+                                
                             case 'interger':
-                                context.setContent((state) => {
-                                    state[prop] = e.target.valueAsNumber || e.target.value;
+                                return context.setContent((state) => {
+                                    state[prop] = e.target.valueAsNumber;
                                     return ({ ...state });
                                 })
-                                break
+                                
                             default:
                                 break;
                         }
-                   }
+                    }
                 }
 
             })
         })
+
+        // return console.log(context.content)
         
     }
 
-
-
-    function addField(e, cont, prop, maxItems) {
+   async function addField(e, cont, prop, maxItems) {
         const newField = cont ? cont : [];
-        let obj = { ...context.content };
-        
+        let obj = { ...context.content }; 
         if (property) {
-            if (context.tag) {
-                newField.push({
-                    [context.tag]: ''
-                })
-                obj[property][prop] = newField;
-                context.setContent(obj);
-                
-            } else {
-                newField.push({})
-                obj[property][prop] = newField;
-                context.setContent(obj);
+            if (objList) {
+                let str;
+                let bool;
+                let boolValue;
+                let int;
+                let label;
+                Object.keys(objList).map((l, i) => {
+                    switch (objList[l].type) {
+                        case 'string':
+                            return str = l;
+                        case 'boolean':
+                            return bool = l,
+                                boolValue = objList[l].default;
+                        case 'integer':
+                            return int = l;
+                        default:
+                            label = l;
+                            break;
+                    }
+                }
+                )
+
+                if (Object.keys(obj).length === 0) { // obj is empty?
+                    if (str || bool || label) {
+                        context.setContent((state) => {
+                            return {
+                                ...state,
+                                [property]: {
+                                    [prop]: [{
+                                        [bool ?? null]: boolValue ?? null,
+                                        [str ?? null]: null,
+                                        [int ?? null]: null
+                                    }]
+                                }
+                            }
+                        }
+                        )
+                    } 
+                } else if (obj[property]) {
+                    newField.push({
+                        [bool ?? null]: boolValue ?? null,
+                        [str ?? null]: null,
+                        [int ?? null]: null,
+                    })
+                    obj[property][prop] = newField;
+                    context.setContent(obj);
+                    // console.log(obj);
+
+                } else {
+                    context.setContent((state) => {
+                        return {
+                            ...state,
+                            [property]: {
+                                [prop]: [{
+                                    [bool ?? null]: boolValue ?? null,
+                                    [str ?? null]: null,
+                                    [int ?? null]: null
+                                }]
+                            }
+                        }
+                    }
+                    )
+                }
             }
-          
             
         } 
         
         if (!property) {
-            newField.push('');
-            obj[prop] = newField;
-            context.setContent(obj);
-            console.log('no property')
+            if (maxItems && newField.length < maxItems) {
+                newField.push('');
+                obj[prop] = newField;
+                context.setContent(obj);
+                // console.log('maxItems')
+            }
+            if (!maxItems) {
+                newField.push(['']);
+                obj[prop] = newField;
+                context.setContent(obj);
+                // console.log('no maxItems')
+            }
         }
+       
+       
+      
 
-        console.log(context.content);
     }
-
-
-    function removeField(cont, prop, k) {
+    
+    function removeField(e, cont, prop,) {
         const field = cont;
         let obj = { ...context.content };
-        field.splice(k, 1);
-        if (property) {
-            obj[property][prop] = field;
-            context.setContent(obj)
+
+        if (Object.keys(obj).length <= 0) {
+            console.log('no item to delete')
         } else {
-            obj[prop] = field;
-            context.setContent(obj)
+            field.splice(indexRef.current, 1)
+            if (property) {
+                obj[property][prop] = field;
+                context.setContent(obj)
+                console.log(
+                    obj
+                )
+            } else {
+                obj[prop] = field;
+                context.setContent(obj)
+                console.log(obj)
+            }
+            
         }
+
     }
+
+    
 
 
     return (
-        <div className="object-container"  >
-            <div className="container">
+        <div className="object-container"   >
+            <div className="container"
+                draggable={handleDragStart ? true : false}
+                onDragStart={handleDragStart ? (e) => handleDragStart(e, k) : null}
+                onDragEnter={dragging ? (e)=>{ handleDragEnter(e, k)} : null}
+            >
             {
                 properties ? Object.keys(properties).map((value, key) => {
                     // console.log({
                     //     content: content,
                     //     value: value,
-                    //     item:content[value]
+                    //     item: content[value],
+                    //     key: key,
                     // })
-                    switch (properties[value].type) {  
-                        case 'string':
-                          
+                switch (properties[value].type) {  
+                    case 'string':
                         return properties[value].enum ?
                             <OptionsBox
                                 key={key}
@@ -181,49 +292,55 @@ function ObjectContainer({
 
                             />
                             :
-                            <StringContainer
-                                key={key}
-                                k={key}
-                                schema={schema}
-                                schemaValue={properties[value]}
-                                valueType={properties[value].type}
-                                content={content ? content[value] : null}
-                                fullContent={content ? content : null}
-                                property={value}
-                                handleChange={handleChange}
-                            />
+                        <StringContainer
+                            key={key}
+                            k={key}
+                            schema={schema}
+                            schemaValue={properties[value]}
+                            valueType={properties[value].type}
+                            content={content ? content[value] : null}
+                            fullContent={content ? content : null}
+                            property={value}
+                            handleChange={handleChange}
+                        />
 
                     case 'boolean':
-                        return <Checkbox
-                                key={key}
-                                k={key}
-                                id={unique_id}
-                                schema={schema}
-                                schemaValue={properties[value]}
-                                valueType={properties[value].type}
-                                content={content ? content[value] : null}
-                                property={value}
-                                handleChange={handleChange}
-                            />
+                    return <Checkbox
+                            id={unique_id}
+                            key={key}
+                            k={key}
+                            schema={schema}
+                            schemaValue={properties[value]}
+                            valueType={properties[value].type}
+                            content={content ? content[value] : properties[value].default}
+                            property={value}
+                            handleChange={handleChange}
+                        />
 
                     case 'array':
-                    // console.log(value);
-                    // console.log(content ? content[value] : null, value)
-                    return <ArrayContainer
+                        // console.log(content? content[value].length : null)
+                        return <>
+                        {value ? <p>{value}</p>:null}
+                        <span className="line-w" />
+                        <ArrayContainer
                         key={key}
                         k={key}
+                        indexRef={indexRef}
                         id={unique_id}
                         schema={schema}
                         schemaValue={properties[value]}
+                        maxItems={properties[value].maxItems ?? null}
                         valueType={properties[value].type}
                         content={content ? content[value] : null}
                         setContent={setContent}
                         property={value}
-                        // type={valueType}
                         handleChange={handleChange}
                         addField={addField}
                         removeField={removeField}
-                    />
+                        objList={objList}
+                        setObjList={setObjList}
+                            />
+                            </>
                     
                     case 'integer':
                         return <IntergerContainer
@@ -236,22 +353,23 @@ function ObjectContainer({
                             property={value}
                             handleChange={handleChange}
                         />
-                        case 'object':
-                            
-                            return <ObjectContainer
-                                key={key}
-                                k={key}
-                                id={unique_id}
-                                schemaValue={properties[value]}
-                                schema={schema}
-                                properties={properties[value].properties}
-                                valueType={properties[value].type}
-                                content={content[value]}
-                                property={value}
-                                handleChange={handleChange}
-                                onChange={() => handleChange(properties[value].type)}
-                            />
-
+                    case 'object':
+                        return <>
+                        {value ? (<p>{ value}</p>):null}
+                        <span className="line-w"/>
+                        <ObjectContainer
+                            key={key}
+                            k={key}
+                            id={unique_id}
+                            schemaValue={properties[value]}
+                            schema={schema}
+                            properties={properties[value].properties}
+                            valueType={properties[value].type}
+                            content={content[value] ? content[value] :  null}
+                            property={value}
+                            handleChange={handleChange}    
+                        />
+                        </>
                     default:
                         return null;
                     
@@ -261,8 +379,7 @@ function ObjectContainer({
                 }
                 
             </div>
-    
-          
+            
         </div>
     )
 }

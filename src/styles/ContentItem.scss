@@ -4,11 +4,28 @@
     padding-top: 2.5em;
     .form {
         display: flex;
-        margin: 0 auto;
+        flex-direction: column;
         justify-content: center;
         max-width: 800px;
         width: 100%;
-       
+        margin: 0 auto;
         border: 1px solid black;
+
+        .btn-submit{
+            max-width: 10em;
+            width: 100%;
+            height: 3.5em;
+            align-self: flex-end;
+            margin: 1.5em;
+            border: none;
+            background-color: rgb(192, 25, 25);
+            color: white;
+            cursor: pointer;
+            &:hover{
+              outline: 1px black solid;
+                
+            }
+        }
+        
     }
 }       

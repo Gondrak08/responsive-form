@@ -24,13 +24,13 @@ function OptionsBox({ k, schema, schemaValue, valueType, content, property, hand
             )} >
                 
                 {
-                        schemaValue.enum.length > 0 ?
-                        schemaValue.enum.map((option, key) =>
-                        
-                        (
-                            <option id={unique_id} key={key} >{option}</option> )
-                        )
-                        : ''
+                    schemaValue.enum.length > 0 ?
+                    schemaValue.enum.map((option, key) =>
+                    
+                    (
+                        <option id={unique_id} key={key} >{option}</option> )
+                    )
+                    : ''
                 }
             </select>
         </div>

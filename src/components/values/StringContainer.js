@@ -6,65 +6,73 @@ import { v4 as uuid } from 'uuid';
 
 
 
-function PlainText({ k, id, schema, schemaValue, valueType,  content, fullContent, property, handleChange }) {
+function PlainText({ k, id, schema, schemaValue, valueType, content, fullContent, property, handleChange, handleDragStart, handleDragEnter, handleDragDrop, dragging  }) {
     const context = useContext(FormContext)
-  
-
-
-
-
     const unique_id = uuid();
-    // console.log(property);
-    context.setTag(property)
+    useEffect(() => {
+        context.setStrTag(property)
+    },[property])
+    // context.setStrTag(property)
+    // console.log(k)
     return (
         <>
         {
-            typeof content == 'string' ?
                 <div className="plain-text" >
                     {
-                            schemaValue.title ? (<p>{schemaValue.title} </p>)
-                            :
-                                schemaValue.type ? (<p>{schemaValue.type}</p>)
-                                    :
-                                    null
+                        schemaValue.title ? (<p>{schemaValue.title} </p>)
+                        :
+                            schemaValue.type ? (<p>{schemaValue.type}</p>)
+                                :
+                                null
                     }
-                    <input
-                        id={unique_id}
-                        defaultValue={content}
-                        // value={content}
-                        key={k}
-                        type={schemaValue.type}
-                        name={property}
-                        label={property}
-                        placeholder={schemaValue.title}
-                        onChange={(e) => handleChange(
-                            e,
-                            schema,
-                            content,
-                            property,
-                            e.target.value,
-                            e.target.id,
-                            k,
-                            valueType
-                        )}
+                    {
+                        handleDragStart ?
+                        
+                         (<input
+                            id={unique_id}
+                            defaultValue={content ? content : null}
+                            key={k}
+                            type={schemaValue.type}
+                            name={property}
+                            label={property}
+                            placeholder={schemaValue.title}
+                            onChange={(e) => handleChange(
+                                e,
+                                schema,
+                                content,
+                                property,
+                                e.target.value,
+                                e.target.id,
+                                k,
+                                valueType
+                            )}
                             draggable
-                        />
+                            onDragStart={(e) => handleDragStart(e, k)}
+                            onDragEnter={dragging ? (e) => {handleDragEnter(e, k)}: null}
+                        />)
+                            :
+                            (<input
+                                id={unique_id}
+                                defaultValue={content ? content : null}
+                                key={k}
+                                type={schemaValue.type}
+                                name={property}
+                                label={property}
+                                placeholder={schemaValue.title}
+                                onChange={(e) => handleChange(
+                                    e,
+                                    schema,
+                                    content,
+                                    property,
+                                    e.target.value,
+                                    e.target.id,
+                                    k,
+                                    valueType
+                                )}
+                            />)
+                    }
 
                 </div>
-                // : content instanceof Object ? Object.keys(content).map(item => (
-                //     <div className="plain-text" >
-                //         <input
-                //             id={id}
-                //             key={k}
-                //             defaultValue={content[item]}
-                //             type={schema.type}
-                //             name={property}
-                //             label={property}
-                //             placeholder={schema.title}
-                //             onChange={(e) => handleChange(e, e.target.value, property, k, content)} />
-                //     </div>
-                // ))
-                : null
         }
            
         </>
