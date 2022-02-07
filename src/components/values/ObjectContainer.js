@@ -13,29 +13,35 @@ import IntergerContainer from './IntergerContainer';
 import { v4 as uuid } from 'uuid';
 
 function ObjectContainer({
+    k,
     properties,
     property,
     content,
-    setContent,
     schema,
     valueType,
-    k,
-    handleDragStart,
-    handleDragEnter,
-    handleDragDrop,
-    dragging
+    // handleDragStart,
+    // handleDragEnter,
+    // handleDragDrop,
+    // dragging
 }) {
     
+
+   
+
     const unique_id = uuid();
     const context = useContext(FormContext);
     const indexRef = useRef();
     const [objList, setObjList] = useState({});
     
-
+    useEffect(() => {
+        if (property) {
+            context.setObjProperty(property);
+        }  
+    },[property])
 
 
     function handleChange(e, schema, content, prop, value, id, key, type) {
-         Object.keys(schema).map(i => {
+        Object.keys(schema).map(i => {
             let obj = schema[i]
             if (obj instanceof Object) Object.keys(obj).map(label => {            
                 // Objects List:        
@@ -63,7 +69,7 @@ function ObjectContainer({
                             
                         } else {
                             // if (context.content) {
-                            console.log('hiiooyyy')
+                            // console.log('hiiooyyy')
                             if (context.content[label][property]) {
                                 if (property && label && prop) {
                                     if (context.content[label][property].length > 0) {
@@ -102,16 +108,18 @@ function ObjectContainer({
 
                 if (!property) {
                     // Arrays List
+                    
                     if (context.content[prop] instanceof Object) {
                         context.setContent((state) => {
                             state[prop][key] = value;
                             return ({ ...state });
                         })
                         // console.log(context.content, 'array');
+                        // console.log(type, e.target.value)
                     } else {
                         switch (type) {
                             case 'boolean':
-                               return context.setContent((state) => {
+                                return context.setContent((state) => {
                                     state[prop] = value;
                                     return ({ ...state })
                                 }),
@@ -123,8 +131,9 @@ function ObjectContainer({
                                     return ({ ...state });
                                 }),
                                 console.log(context.content)
+                                  
                                 
-                            case 'interger':
+                            case 'integer':
                                 return context.setContent((state) => {
                                     state[prop] = e.target.valueAsNumber;
                                     return ({ ...state });
@@ -145,7 +154,8 @@ function ObjectContainer({
 
    async function addField(e, cont, prop, maxItems) {
         const newField = cont ? cont : [];
-        let obj = { ...context.content }; 
+       let obj = { ...context.content };
+       console.log(property)
         if (property) {
             if (objList) {
                 let str;
@@ -229,8 +239,6 @@ function ObjectContainer({
             }
         }
        
-       
-      
 
     }
     
@@ -262,11 +270,11 @@ function ObjectContainer({
 
 
     return (
-        <div className="object-container"   >
+        <div className="object-container" key={k}   >
             <div className="container"
-                draggable={handleDragStart ? true : false}
-                onDragStart={handleDragStart ? (e) => handleDragStart(e, k) : null}
-                onDragEnter={dragging ? (e)=>{ handleDragEnter(e, k)} : null}
+                // draggable={handleDragStart ? true : false}
+                // onDragStart={handleDragStart ? (e) => handleDragStart(e, k) : null}
+                // onDragEnter={dragging ? (e)=>{ handleDragEnter(e, k)} : null}
             >
             {
                 properties ? Object.keys(properties).map((value, key) => {
@@ -276,6 +284,7 @@ function ObjectContainer({
                     //     item: content[value],
                     //     key: key,
                     // })
+    
                 switch (properties[value].type) {  
                     case 'string':
                         return properties[value].enum ?
@@ -318,7 +327,6 @@ function ObjectContainer({
                         />
 
                     case 'array':
-                        // console.log(content? content[value].length : null)
                         return <>
                         {value ? <p>{value}</p>:null}
                         <span className="line-w" />
@@ -332,7 +340,6 @@ function ObjectContainer({
                         maxItems={properties[value].maxItems ?? null}
                         valueType={properties[value].type}
                         content={content ? content[value] : null}
-                        setContent={setContent}
                         property={value}
                         handleChange={handleChange}
                         addField={addField}
@@ -343,6 +350,17 @@ function ObjectContainer({
                             </>
                     
                     case 'integer':
+                        return <IntergerContainer
+                            key={key}
+                            k={key}
+                            schema={schema}
+                            schemaValue={properties[value]}
+                            valueType={properties[value].type}
+                            content={content ? content[value] : null}
+                            property={value}
+                            handleChange={handleChange}
+                        />
+                    case 'number':
                         return <IntergerContainer
                             key={key}
                             k={key}

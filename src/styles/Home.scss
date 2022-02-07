@@ -1,0 +1,97 @@
+#home{
+    background-color: #fff;
+    min-height: 100vh;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    // padding:1em;
+    .container-home{
+        max-width: 1350px;
+        width: 100%;
+        min-height: 45em;
+        height: 100%;
+        margin: 0 auto;
+        padding: 1em;
+        // margin-top: 4em;
+        display: flex;
+        flex-direction: column;
+      
+        .content{
+            display: flex;
+            gap: 30px;
+            padding: .5em;
+            height: auto;
+            width: 100%;
+           
+            .j-creator{
+            // width: 50%;
+            height: 100%;
+            flex: 1;
+        
+            .schema-box{
+                height: 100%;
+                width: 100%;
+                border: 1px solid black;
+                position: relative;
+                padding:.5em;
+                background-color: rgb(250, 244, 244);
+                .tag{
+                    width: auto;
+                    border: 1px solid black;
+                    background-color: gray;
+                    padding: .7em;
+
+                    span{
+                        width: 100%;
+                        font-weight: bold;
+                    }
+                }
+                #schemaCreator{
+                    width: 97%;
+                    min-height: 50em;
+                    height: 100%;
+                    resize: none;
+                    padding: .7em;
+                    border: none;
+                    outline: none;
+                    &:active{
+                        border:none;
+                        outline: none;
+                    }
+                    &:focus{
+                        border: none;
+                        outline: none;
+                    }
+                }
+            }
+        }
+
+        .f-display{
+            flex: 1;
+            height: 100%;
+            background-color: #fff;
+            .content-display{
+                padding: 0;
+                width: 100%;
+            }
+        }
+       }
+
+    }
+
+
+    @media (max-width:980px) {
+            .container-home{
+                margin: 5em;
+                .content{
+                flex-direction: column;
+                .j-creator{
+                    width: 100%;
+                }
+                .f-display{
+                    width: 100%;
+                }
+            }
+            }    
+        }
+}

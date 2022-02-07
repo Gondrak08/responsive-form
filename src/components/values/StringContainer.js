@@ -1,9 +1,9 @@
 import React,{useContext, useEffect} from 'react'
 import FormContext from '../../context/FormContext'
-import FunctionsContext from '../../context/functions/FunctionsContext';
 import './../../styles/values/PlainText.scss'
 import { v4 as uuid } from 'uuid';
 
+// import FunctionsContext from '../../context/functions/FunctionsContext';
 
 
 function PlainText({ k, id, schema, schemaValue, valueType, content, fullContent, property, handleChange, handleDragStart, handleDragEnter, handleDragDrop, dragging  }) {
@@ -13,7 +13,7 @@ function PlainText({ k, id, schema, schemaValue, valueType, content, fullContent
         context.setStrTag(property)
     },[property])
     // context.setStrTag(property)
-    // console.log(k)
+  
     return (
         <>
         {
@@ -25,10 +25,37 @@ function PlainText({ k, id, schema, schemaValue, valueType, content, fullContent
                                 :
                                 null
                     }
-                    {
+
+
+                    <input
+                        id={unique_id}
+                        defaultValue={content ? content : null}
+                        key={k}
+                        type={schemaValue.type}
+                        name={property}
+                        label={property}
+                        minLength={schemaValue.minLength ?? null}
+                        placeholder={schemaValue.title}
+                        onChange={(e) => handleChange(
+                            e,
+                            schema,
+                            content,
+                            property,
+                            e.target.value,
+                            e.target.id,
+                            k,
+                            valueType
+                        )}
+                        // draggable
+                        // onDragStart={(e) => handleDragStart(e, k)}
+                        // onDragEnter={dragging ? (e) => { handleDragEnter(e, k) } : null}
+                    />
+
+                    {/* {
                         handleDragStart ?
                         
-                         (<input
+                            (
+                            <input
                             id={unique_id}
                             defaultValue={content ? content : null}
                             key={k}
@@ -49,7 +76,9 @@ function PlainText({ k, id, schema, schemaValue, valueType, content, fullContent
                             draggable
                             onDragStart={(e) => handleDragStart(e, k)}
                             onDragEnter={dragging ? (e) => {handleDragEnter(e, k)}: null}
-                        />)
+                                />
+                            )
+                            
                             :
                             (<input
                                 id={unique_id}
@@ -70,7 +99,7 @@ function PlainText({ k, id, schema, schemaValue, valueType, content, fullContent
                                     valueType
                                 )}
                             />)
-                    }
+                    } */}
 
                 </div>
         }

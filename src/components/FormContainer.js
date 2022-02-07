@@ -1,43 +1,45 @@
-import React,{useState, useEffect, useRef, useContext} from 'react'
+import React,{useState, useEffect, useContext} from 'react'
 import '../styles/ContentItem.scss'
 
-import SchemaJson from '../context/Schema.json'
 import ObjectContainer from './values/ObjectContainer';
 import FormContext from '../context/FormContext';
 
-
-function ContentItem() {
-    const [schema, setSechema] = useState(null);
-    const context = useContext(FormContext);
+function Form({schema}) {
+    const [schemaJson, setSechemaJson] = useState(null);
     useEffect(() => {
-        setSechema(SchemaJson)
-    }, [])
-    // console.log(schema);
-    const { type, properties } = schema ?? {};
-
-
+        setSechemaJson(schema)
+    }, [schema])
+    const context = useContext(FormContext);
+    
+    
     function handleSubmit(e) {
         alert(JSON.stringify(context.content, undefined, 12))
-        e.preventDefault();
-    }
+        e.preventDefault()
 
+    }
+    const { type, properties } = schemaJson  ?? {} ;
+    
     return (
         <section className="content-display" >
+
             {type === 'object' ? (
                 <form className="form" onSubmit={(e) => handleSubmit(e)} >
                     <ObjectContainer
                         content={context.content}
                         setContent={context.setContent}
                         properties={properties}
-                        schema={schema}
+                        schema={schemaJson}
                     />
                     <button type="submit"  className="btn-submit"  >
                     Submit content
                     </button>
-            </form>) : 'não é objeto'}
+                </form>)
+                :
+                'não é objeto'
+            }
             
         </section>
     )
 }
 
-export default ContentItem
+export default Form;

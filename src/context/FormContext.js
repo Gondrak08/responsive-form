@@ -1,5 +1,5 @@
-import { createContext, useEffect, useState, useRef } from "react";
-import SchemaJson from './Schema.json'
+import { createContext, useState, useRef } from "react";
+
 
 const FormContext = createContext({});
 
@@ -7,6 +7,7 @@ export const FormProvider = ({ children }) => {
     const [strTag, setStrTag] = useState();
     const [boolTag, setBoolTag] = useState();
     const [boolean, setBoolean] = useState(null);
+    const [objProperty, setObjProperty] = useState(null) 
     const [content, setContent] = useState({     
         // "list": [
         //     "azul",
@@ -31,7 +32,10 @@ export const FormProvider = ({ children }) => {
         // "active": true
     
     })
-   
+    
+
+ 
+
     
     return (
         <FormContext.Provider value={{
@@ -42,7 +46,10 @@ export const FormProvider = ({ children }) => {
             boolean,
             setBoolean,
             boolTag,
-            setBoolTag
+            setBoolTag,
+            objProperty,
+            setObjProperty,
+
         }} >
             {children}
         </FormContext.Provider>

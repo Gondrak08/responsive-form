@@ -1,81 +1,71 @@
 import React, { useRef, useState, useContext, useEffect } from 'react'
+
 import FormContext from '../../context/FormContext';
+import {DragDropContext, Droppable, } from 'react-beautiful-dnd'
+
 import StringContainer from './StringContainer';
 import ObjectContainer from './ObjectContainer';
 import './../../styles/values/ListContainer.scss'
-import { v4 as uuid } from 'uuid';
 
+import { v4 as uuid } from 'uuid';
 import { MdAdd, MdDelete } from 'react-icons/md'
 
-function ArrayContainer({ schema, schemaValue, maxItems, valueType, property, content, setContent, type, handleChange, addField, removeField, k, indexRef, objList, setObjList }) {
+
+
+function ArrayContainer({ k, indexRef, schema, schemaValue, maxItems, valueType, property, content, handleChange, addField, removeField,  objList, setObjList }) {
     const unique_id = uuid();
     const context = useContext(FormContext);
     
-    const [keyList, setKeyList] = useState(null)
-    const [dragging, setDragging] = useState(false);
-    const dragItem = useRef();
-    const dragNode = useRef();
-  
-
     
+    
+    
+    // const [keyList, setKeyList] = useState(null)
+    // const [dragging, setDragging] = useState(false);
+    // const dragItem = useRef();
+    // const dragNode = useRef();
 
-    const handleDragStart = (e, params) => {
+    // const handleDragStart = (e, params) => {
         
-        dragNode.current = e.target;
-        dragNode.current.addEventListener('dragend', handleDragDrop)
-        dragItem.current = params;
-        // console.log(dragItem.current, dragNode.current)
-        setTimeout(() => {
-            setDragging(true);
-        }, 0)
-    }
+    //     dragNode.current = e.target;
+    //     dragNode.current.addEventListener('dragend', handleDragDrop)
+    //     dragItem.current = params;
+    //     // console.log(dragItem.current, dragNode.current)
+    //     setTimeout(() => {
+    //         setDragging(true);
+    //     }, 0)
+    // }
     
-    const handleDragEnter = (e, targetItem) => {
-        const obj = {...context.content}
+    // const handleDragEnter = (e, targetItem) => {
+    //     const obj = {...context.content}
        
-        if (dragNode.current !== e.target) {
-            context.setContent((state) => {
-                let newList = JSON.parse(JSON.stringify(state[property]))
-                newList.splice(targetItem.item, 0, newList.splice(dragItem.current, 1)[0])
+    //     if (dragNode.current !== e.target) {
+    //         context.setContent((state) => {
+    //             let newList = JSON.parse(JSON.stringify(state[property]))
+    //             newList.splice(targetItem.item, 0, newList.splice(dragItem.current, 1)[0])
                 
-                obj[property] = newList
-                dragItem.current = targetItem;
-                return {...obj}
-            })
-                // let newList = JSON.parse(JSON.stringify(content));
-                // newList.splice(targetItem, 0, newList.splice(dragItem.current, 1)[0])
-                // obj[property] = newList
-                // context.setContent(obj)
-            }
+    //             obj[property] = newList
+    //             dragItem.current = targetItem;
+    //             return {...obj}
+    //         })
+    //             // let newList = JSON.parse(JSON.stringify(content));
+    //             // newList.splice(targetItem, 0, newList.splice(dragItem.current, 1)[0])
+    //             // obj[property] = newList
+    //             // context.setContent(obj)
+    //         }
         
-        console.log(context.content)
-        // let currentItem = dragItem.current;
-        // const obj = {...context.content}
-        // if (dragItem.current!== e.target) {
-        //     let newList = JSON.parse(JSON.stringify(content));
-        //     newList.splice(targetItem, 0, newList.splice(currentItem, 1)[0])
-
-        //     dragItem.current = targetItem;
-        //     obj[property] = newList;
-        //     context.setContent(obj)
-        //     console.log(context.content)   
-        // }
-
-
-    }
-
-    const handleDragDrop = (e, params) => {
-        setDragging(false);
-        dragItem.current = null;
-        dragNode.current.removeEventListener('dragend', handleDragDrop)
-        dragNode.current = null;
+    //     console.log(context.content)
         
-    }
+    // }
 
-    console.log({
-        content: content,
-        context: context.content
-    })
+    // const handleDragDrop = (e, params) => {
+    //     setDragging(false);
+    //     dragItem.current = null;
+    //     dragNode.current.removeEventListener('dragend', handleDragDrop)
+    //     dragNode.current = null;
+        
+    // }
+
+    
 
     return (
         <section className="array-container">
@@ -117,9 +107,10 @@ function ArrayContainer({ schema, schemaValue, maxItems, valueType, property, co
                     </button>
                 ) : null
             }
-           
+                
                 <form className="list-values" id={content && content.length > 0 ? "active" : null}
-                    onDragEnter={dragging && [content].length ? (e) => { handleDragEnter(e,k) } : null}  >
+                    // onDragEnter={dragging && [content].length ? (e) => { handleDragEnter(e, k) } : null}
+                >
                 {
                     
                         Object.keys(schemaValue).map((item, key) => {
@@ -138,10 +129,10 @@ function ArrayContainer({ schema, schemaValue, maxItems, valueType, property, co
                                     content={content[cont]}
                                     property={property}
                                     handleChange={handleChange}
-                                    handleDragStart={handleDragStart}
-                                    handleDragEnter={handleDragEnter}
-                                    handleDragDrop={handleDragDrop}
-                                    dragging={dragging}
+                                    // handleDragStart={handleDragStart}
+                                    // handleDragEnter={handleDragEnter}
+                                    // handleDragDrop={handleDragDrop}
+                                    // dragging={dragging}
                                     
 
                                 />
@@ -157,10 +148,10 @@ function ArrayContainer({ schema, schemaValue, maxItems, valueType, property, co
                                     valueType={schemaValue[item].type ?? null}
                                     content={content[cont] ?? null}
                                     property={property}
-                                    handleDragStart={handleDragStart}
-                                    handleDragEnter={handleDragEnter}
-                                    handleDragDrop={handleDragDrop}
-                                    dragging={dragging}
+                                    // handleDragStart={handleDragStart}
+                                    // handleDragEnter={handleDragEnter}
+                                    // handleDragDrop={handleDragDrop}
+                                    // dragging={dragging}
                                 />
                             )) :
                                 (
