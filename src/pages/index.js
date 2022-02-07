@@ -8,7 +8,7 @@ function Home() {
     const EmptyJson = () => {
         return (
             <div>
-                <h3>please insert the schema at the text field at the side</h3>
+                <h3>please insert the schema in the text field at the side</h3>
             </div>
             )
     }
