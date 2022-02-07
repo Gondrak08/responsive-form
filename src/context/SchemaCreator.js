@@ -10,7 +10,7 @@ const SchemaCreator = ({data, setData}) => {
                 <div className="tag">
                     <span>JsonSchema</span>
                 </div>
-                <textarea id="schemaCreator" onChange={(e)=> HandlingData(e)} name="schemaCreator" cols="auto" rows="auto" placeholder="Put here your schema" >
+                <textarea id="schemaCreator" onChange={(e) => HandlingData(e)} name="schemaCreator" cols="auto" rows="auto" placeholder="{ ...Put your schema here }" >
                 </textarea> 
             </div>
         </>

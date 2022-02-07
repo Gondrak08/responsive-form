@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Form from '../components/FormContainer'
 import SchemaCreator from '../context/SchemaCreator';
 import '../styles/Home.scss'
@@ -8,14 +8,14 @@ function Home() {
     const EmptyJson = () => {
         return (
             <div>
-                <h3>Por favor insira um Schema ao lado</h3>
+                <h3>please insert the schema at the text field at the side</h3>
             </div>
             )
     }
     return (
         <section id="home">
             <div className="container-home">
-                <h1>JSON FORM CREATOR</h1>
+                <h1 className="title">JSON FORM CREATOR</h1>
                 <div className="content">
                     <div className="j-creator">
                         <SchemaCreator
