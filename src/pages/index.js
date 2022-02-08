@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import Form from '../components/Form'
 import SchemaCreator from '../components/SchemaCreator';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
-import Exemple from '../data/text.md'
 import '../styles/Home.scss'
 
 function Home() {
