@@ -12,8 +12,10 @@ function PlainText({ k, id, schema, schemaValue, valueType, content, fullContent
     useEffect(() => {
         context.setStrTag(property)
     },[property])
-    // context.setStrTag(property)
   
+    
+    console.log(schemaValue.format)
+
     return (
         <>
         {
@@ -31,7 +33,7 @@ function PlainText({ k, id, schema, schemaValue, valueType, content, fullContent
                         id={unique_id}
                         defaultValue={content ? content : null}
                         key={k}
-                        type={schemaValue.type}
+                        type={schemaValue.format ?? schemaValue.type}
                         name={property}
                         label={property}
                         minLength={schemaValue.minLength ?? null}
