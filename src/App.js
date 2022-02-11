@@ -1,6 +1,6 @@
 import { FormProvider } from './context/FormContext';
 import Home from './pages/index'
-
+import Footer from './components/global/Footer'
 
 function App() {
   return (
@@ -8,6 +8,7 @@ function App() {
       <FormProvider>
           <Home />
       </FormProvider>
+      <Footer />
     </div>
   );
 }

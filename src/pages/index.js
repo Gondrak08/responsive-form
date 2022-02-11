@@ -13,27 +13,43 @@ function Home() {
             "properties": {
                 "first_name": {
                     "type": "string",
-                    "title":"First Name"
+                    "title": "Nome"
                 },
                 "last_name": {
                     "type": "string",
-                    "title": "Last Name"
+                    "title": "Sobrenome"
                 },
                 "birthday": {
                     "type": "string",
                     "format": "date",
-                    "title": "Birthday"
+                    "title": "Data de nascimento"
                 },
                 "address": {
-                "type": "object",
-                "properties": {
-                    "street_address": { "type": "string" },
-                    "city": { "type": "string" },
-                    "state": { "type": "string" },
-                    "country": { "type" : "string" }
-                    }
+                    "type": "object",
+                    "properties": {
+                        "street_address": {
+                            "type": "string",
+                            "title": "Rua"
+                        },
+                        "address_number": {
+                            "type": "string",
+                            "title": "CEP"
+                        },
+                        "city": {
+                            "type": "string",
+                            "title": "Cidade"
+                        },
+                        "state": {
+                            "type": "string",
+                            "title": "UF"
+                        },
+                        "country": {
+                            "type": "string",
+                            "title": "País"
+                        }
                     }
                 }
+            }
         }
         `
         return (
@@ -54,9 +70,9 @@ function Home() {
                     This JSON SChema validator do what the name already say's. The app takes the Schema that you write in the textarea and authomaticly generates a form for you. 
                 </p>
                 <p>
-                    You can learn more about JSON Schema and it power at the <a href="https://json-schema.org/understanding-json-schema/" >link.</a>
+                    You can learn more about JSON Schema and it power at the <a href="https://json-schema.org/understanding-json-schema/" target="_blank" rel="noreferrer" >link.</a>
                     <br />
-                    and you can use this opensource library acessing the git <a href="https://github.com/Gondrak08/responsive-form">repository</a>
+                    and you can use this opensource library acessing the git <a href="https://github.com/Gondrak08/JSONSchema-validator" target="_blank" rel="noreferrer">repository</a>
                 </p>
                 
             </div>

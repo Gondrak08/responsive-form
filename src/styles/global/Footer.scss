@@ -1,0 +1,23 @@
+.footer{
+    background-color: #fff;
+    position: relative;
+    bottom: 0;
+    height: 2.5vmax;
+    padding:.5em 0;
+    display: flex;
+    justify-content: center;
+    .container{
+        display: flex;
+        text-align: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100%;
+        font-size: 18px;
+        gap: 5px;
+        span{
+            a{
+                padding: 0 .3em;
+            }
+        }
+    }
+}
