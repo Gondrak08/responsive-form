@@ -9,7 +9,7 @@ const SchemaCreator = ({data, setData}) => {
         }
         
     }   
-    console.log(data)
+    // console.log(data)
     return (
         <>
             <div className="schema-box">

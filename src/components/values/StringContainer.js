@@ -3,8 +3,6 @@ import FormContext from '../../context/FormContext'
 import './../../styles/values/PlainText.scss'
 import { v4 as uuid } from 'uuid';
 
-// import FunctionsContext from '../../context/functions/FunctionsContext';
-
 
 function PlainText({ k, id, schema, schemaValue, valueType, content, fullContent, property, handleChange, handleDragStart, handleDragEnter, handleDragDrop, dragging  }) {
     const context = useContext(FormContext)
@@ -14,7 +12,7 @@ function PlainText({ k, id, schema, schemaValue, valueType, content, fullContent
     },[property])
   
     
-    console.log(schemaValue.format)
+    // console.log(schemaValue.format)
 
     return (
         <>

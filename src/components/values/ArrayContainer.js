@@ -4,6 +4,7 @@ import FormContext from '../../context/FormContext';
 import {DragDropContext, Droppable, } from 'react-beautiful-dnd'
 
 import StringContainer from './StringContainer';
+import IntergerContainer from './IntergerContainer'
 import ObjectContainer from './ObjectContainer';
 import './../../styles/values/ListContainer.scss'
 
@@ -13,12 +14,31 @@ import { MdAdd, MdDelete } from 'react-icons/md'
 
 
 function ArrayContainer({ k, indexRef, schema, schemaValue, maxItems, valueType, property, content, handleChange, addField, removeField,  objList, setObjList }) {
-    const unique_id = uuid();
+    
+    const [data, setData] = useState(null);
     const context = useContext(FormContext);
+    const unique_id = uuid();
     
+    useEffect(() => {
+        if (!data) {
+            setData(schemaValue)
+        }
+    }, [schemaValue])
     
+   
     
-    
+    // if (data) {
+    //     Object.keys(data).map(i => {
+    //         let newVal = data[i];
+    //         Object.keys(newVal).map(i => {
+    //             console.log(newVal[i])
+    //         })
+    //     })
+    // }
+
+
+
+
     // const [keyList, setKeyList] = useState(null)
     // const [dragging, setDragging] = useState(false);
     // const dragItem = useRef();
@@ -113,56 +133,77 @@ function ArrayContainer({ k, indexRef, schema, schemaValue, maxItems, valueType,
                 >
                 {
                     
-                        Object.keys(schemaValue).map((item, key) => {
-                        
-                            switch (schemaValue[item].type) {
-                            case 'string':
-                            return content instanceof Object ? Object.keys(content).map(cont => (
-                                indexRef.current = cont,
-                                <StringContainer
-                                    key={key}
-                                    id={unique_id}
-                                    k={cont}
-                                    schema={schema}
-                                    schemaValue={schemaValue[item]}
-                                    valueType={schemaValue[item].type}
-                                    content={content[cont]}
-                                    property={property}
-                                    handleChange={handleChange}
-                                    // handleDragStart={handleDragStart}
-                                    // handleDragEnter={handleDragEnter}
-                                    // handleDragDrop={handleDragDrop}
-                                    // dragging={dragging}
-                                    
+                        data ? Object.keys(data).map((item, key) => {
 
-                                />
-                            )) : null        
-                            case 'object':
-                            return content instanceof Object ? Object.keys(content).map((cont, index) => (
-                                indexRef.current = index,
-                                <ObjectContainer
-                                    properties={schemaValue[item].properties}
-                                    key={index}
-                                    k={index}
-                                    schema={schema}
-                                    valueType={schemaValue[item].type ?? null}
-                                    content={content[cont] ?? null}
-                                    property={property}
-                                    // handleDragStart={handleDragStart}
-                                    // handleDragEnter={handleDragEnter}
-                                    // handleDragDrop={handleDragDrop}
-                                    // dragging={dragging}
-                                />
-                            )) :
-                                (
-                                    setObjList(schemaValue[item].properties),
-                                    null
-                                )
-                        default:
-                            return null;
-                            
-                    }
-                    })
+                            switch (data[item].type) {
+                                case 'string':
+                                    return content instanceof Object ? Object.keys(content).map(cont => (
+                                        indexRef.current = cont,
+                                        <StringContainer
+                                            key={key}
+                                            id={unique_id}
+                                            k={cont}
+                                            schema={schema}
+                                            schemaValue={data[item]}
+                                            valueType={data[item].type}
+                                            content={content[cont]}
+                                            property={property}
+                                            handleChange={handleChange}
+                                        // handleDragStart={handleDragStart}
+                                        // handleDragEnter={handleDragEnter}
+                                        // handleDragDrop={handleDragDrop}
+                                        // dragging={dragging}
+
+
+                                        />
+                                    )) : null
+                                case 'number':
+                                    return  content instanceof Object ? Object.keys(content).map(cont => (
+                                        indexRef.current = cont,
+                                        <IntergerContainer
+                                            key={key}
+                                            id={unique_id}
+                                            k={cont}
+                                            schema={schema}
+                                            schemaValue={data[item]}
+                                            valueType={data[item].type}
+                                            content={content[cont]}
+                                            property={property}
+                                            handleChange={handleChange}
+                                        // handleDragStart={handleDragStart}
+                                        // handleDragEnter={handleDragEnter}
+                                        // handleDragDrop={handleDragDrop}
+                                        // dragging={dragging}
+
+
+                                        />
+                                    )) : null
+                                case 'object':
+                                    return content instanceof Object ? Object.keys(content).map((cont, index) => (
+                                        indexRef.current = index,
+                                        <ObjectContainer
+                                            properties={data[item].properties}
+                                            key={index}
+                                            k={index}
+                                            schema={schema}
+                                            valueType={data[item].type ?? null}
+                                            content={content[cont] ?? null}
+                                            property={property}
+                                        // handleDragStart={handleDragStart}
+                                        // handleDragEnter={handleDragEnter}
+                                        // handleDragDrop={handleDragDrop}
+                                        // dragging={dragging}
+                                        />
+                                    )) :
+                                        (
+                                            setObjList(data[item].properties),
+                                            null
+                                        )
+                                default:
+                                    return null;
+
+                            }
+                        }): null
                  }
             </form>
                

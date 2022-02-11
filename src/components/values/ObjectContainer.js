@@ -43,19 +43,23 @@ function ObjectContainer({
     function handleChange(e, schema, content, prop, value, id, key, type) {
         Object.keys(schema).map(i => {
             let obj = schema[i]
-            if (obj instanceof Object) Object.keys(obj).map(label => {            
-                // Objects List:        
+            if (obj instanceof Object) Object.keys(obj).map(label => {
+
+                // Objects and Objectlist:        
                 if (property) {
                     if (obj[label].type === 'object') {
                         // if content is null
                         if (Object.keys(context.content).length == 0) {
                             if (label == property) {
-                                context.setContent([label][property] = {
-                                    [label]:{
-                                        [prop]: value
+                                context.setContent((state) => {
+                                    let newVal = {
+                                        ...state, [property]: {
+                                            ...state[property], [prop]: value || value
+                                        }
                                     }
-                                        
+                                    return (newVal)
                                 })
+                                console.log('hehheh', label, property)
                             }
                             if (label !== property) {
                                 context.setContent([label][property] = {
@@ -65,40 +69,50 @@ function ObjectContainer({
                                 })
                                 console.log(context.content)
                             }
-                           
-                            
-                        } else {
-                            // if (context.content) {
-                            // console.log('hiiooyyy')
-                            if (context.content[label][property]) {
+
+
+                        }
+                        if (Object.keys(context.content).length > 0) {
+                            if (label !== property && context.content[label][property]) {
+
                                 if (property && label && prop) {
                                     if (context.content[label][property].length > 0) {
                                         context.setContent((prevState) => {
-                                            prevState[label][property][k][prop] =  value
+                                            prevState[label][property][k][prop] = value
                                             return ({
                                                 ...prevState
                                             })
                                         })
                                         console.log(context.content[label][property]);
                                     } else {
+
                                         context.setContent((prevState) => {
                                             prevState[label][property][prop] = value
                                             return ({
                                                 ...prevState
                                             })
                                         })
-                                       
+
                                     }
                                 }
                             }
                             else {
+
                                 context.setContent((state) => {
-                                    state[property][prop] = value || value;
-                                    return ({ ...state })
+                                    let newVal = {
+                                        ...state, [property]: {
+                                            ...state[property], [prop]: value
+                                        }
+                                    }
+                                    return (newVal)
                                 })
-                                console.log(context.content[property])
-                                
+                                // context.setContent((state) => {
+                                //     state[property][prop] = value || value;
+                                //     return ({ ...state })
+                                // });
+
                             }
+
                         }
 
 
@@ -108,7 +122,7 @@ function ObjectContainer({
 
                 if (!property) {
                     // Arrays List
-                    
+                    // console.log('hellooooOOOo')
                     if (context.content[prop] instanceof Object) {
                         context.setContent((state) => {
                             state[prop][key] = value;
@@ -123,22 +137,22 @@ function ObjectContainer({
                                     state[prop] = value;
                                     return ({ ...state })
                                 }),
-                                console.log(context.content)
-                                
+                                    console.log(context.content)
+
                             case 'string':
                                 return context.setContent((state) => {
                                     state[prop] = value;
                                     return ({ ...state });
                                 }),
-                                console.log(context.content)
-                                  
-                                
+                                    console.log(context.content)
+
+
                             case 'integer':
                                 return context.setContent((state) => {
                                     state[prop] = e.target.valueAsNumber;
                                     return ({ ...state });
                                 })
-                                
+
                             default:
                                 break;
                         }
@@ -148,7 +162,7 @@ function ObjectContainer({
             })
         })
 
-        // return console.log(context.content)
+        return console.log(context.content)
         
     }
 
@@ -270,7 +284,7 @@ function ObjectContainer({
 
 
     return (
-        <div className="object-container" key={k}   >
+        <div className="object-container" key={k}  >
             <div className="container"
                 // draggable={handleDragStart ? true : false}
                 // onDragStart={handleDragStart ? (e) => handleDragStart(e, k) : null}

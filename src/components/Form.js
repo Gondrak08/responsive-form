@@ -2,6 +2,7 @@ import React,{useState, useEffect, useContext} from 'react'
 import '../styles/ContentItem.scss'
 
 import ObjectContainer from './values/ObjectContainer';
+import ArrayContainer  from './values/ArrayContainer';
 import FormContext from '../context/FormContext';
 
 function Form({schema}) {
@@ -34,7 +35,20 @@ function Form({schema}) {
                     Submit content
                     </button>
                 </form>)
-                :
+                : type === 'array' ? (
+                    <form className="form" onSubmit={(e) => handleSubmit(e)} >
+                        <ArrayContainer
+                            content={context.content}
+                            setContent={context.setContent}
+                            properties={properties}
+                            schema={schemaJson}
+                            schemaValue={schemaJson}
+                        />
+                        <button type="submit" className="btn-submit"  >
+                            Submit content
+                        </button>
+                    </form>)
+                 :
                 'não é objeto'
             }
             
